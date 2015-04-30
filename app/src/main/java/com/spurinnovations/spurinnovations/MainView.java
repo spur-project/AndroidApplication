@@ -30,7 +30,7 @@ public class MainView extends Activity {
         speed = (EditText) findViewById(R.id.getcurspeed);
         showspeed = (Button) findViewById(R.id.setcurspeed);
 
-        /*IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
         final BroadcastReceiver BTReceiver = new BroadcastReceiver() {
             @Override
@@ -40,7 +40,7 @@ public class MainView extends Activity {
                     //Do something if disconnected
                     showToast("BT Disconnected");
                     Intent goHome = new Intent(getApplicationContext(), MainPage.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    goHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(goHome);
 
                 } else {
@@ -49,7 +49,7 @@ public class MainView extends Activity {
             }
         };
 
-        this.registerReceiver(BTReceiver, filter);*/
+        this.registerReceiver(BTReceiver, filter);
 
     }
 

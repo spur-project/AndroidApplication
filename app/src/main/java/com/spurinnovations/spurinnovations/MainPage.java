@@ -1,36 +1,59 @@
 package com.spurinnovations.spurinnovations;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 
-public class MainPage extends Activity {
+public class MainPage extends Activity implements Runnable{
 
     protected ProgressBar spinner;
+    protected static final String TAG = "TAG";
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+    BluetoothAdapter mBluetoothAdapter;
+    //default uuid for serial to bt communication SPP
+    private UUID applicationUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private ProgressDialog mBluetoothConnectProgressDialog;
+    private BluetoothSocket mBluetoothSocket;
+    BluetoothDevice mBluetoothDevice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main_page);
-        spinner = (ProgressBar)findViewById(R.id.spinnerbar);
-        spinner.setVisibility(View.VISIBLE);
 
-        IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
-        IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
-        IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        spinner = (ProgressBar)findViewById(R.id.spinnerbar);
+        spinner.setVisibility(View.GONE);
+
 
         final Handler handler = new Handler();
         Timer t = new Timer();
@@ -38,43 +61,136 @@ public class MainPage extends Activity {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        Intent intentOpenBluetoothSettings = new Intent();
-                        intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                        startActivity(intentOpenBluetoothSettings);
+
+                        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                        if (mBluetoothAdapter == null)
+                        {
+                            showToast("No BT Adapter");
+                        }
+                        else
+                        {
+                            if (!mBluetoothAdapter.isEnabled())
+                            {
+                                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                            }
+                            else
+                            {
+                                ListPairedDevices();
+                                Intent connectIntent = new Intent(MainPage.this, DeviceList.class);
+                                startActivityForResult(connectIntent, REQUEST_CONNECT_DEVICE);
+                            }
+                        }
                     }
                 });
             }
-        }, 2000);
-
-        this.registerReceiver(BTReceiver, filter1);
-        this.registerReceiver(BTReceiver, filter2);
-        this.registerReceiver(BTReceiver, filter3);
+        }, 1000);
 
     }
 
-    private final BroadcastReceiver BTReceiver = new BroadcastReceiver()
+    public void onActivityResult(int mRequestCode, int mResultCode, Intent mDataIntent)
+    {
+        super.onActivityResult(mRequestCode, mResultCode, mDataIntent);
+
+        switch (mRequestCode)
+        {
+            case REQUEST_CONNECT_DEVICE:
+                if (mResultCode == Activity.RESULT_OK)
+                {
+                    Bundle mExtra = mDataIntent.getExtras();
+                    String mDeviceAddress = mExtra.getString("DeviceAddress");
+                    Log.v(TAG, "Coming incoming address " + mDeviceAddress);
+                    mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
+                    mBluetoothConnectProgressDialog = ProgressDialog.show(this, "Connecting...",
+                            mBluetoothDevice.getName() + " : " + mBluetoothDevice.getAddress(), true, false);
+
+                    Thread mBluetoothConnectThread = new Thread(this);
+                    mBluetoothConnectThread.start();
+                }
+                break;
+
+            case REQUEST_ENABLE_BT:
+                if (mResultCode == Activity.RESULT_OK)
+                {
+                    ListPairedDevices();
+                    Intent connectIntent = new Intent(MainPage.this, DeviceList.class);
+                    startActivityForResult(connectIntent, REQUEST_CONNECT_DEVICE);
+                }
+                else
+                {
+                    showToast("Error enabling BT");
+                }
+                break;
+        }
+    }
+
+    private void ListPairedDevices()
+    {
+        Set<BluetoothDevice> mPairedDevices = mBluetoothAdapter.getBondedDevices();
+        if (mPairedDevices.size() > 0)
+        {
+            for (BluetoothDevice mDevice : mPairedDevices)
+            {
+                Log.v(TAG, "PairedDevices: " + mDevice.getName() + " " + mDevice.getAddress());
+            }
+        }
+    }
+
+    public void run()
+    {
+        try
+        {
+            mBluetoothSocket = mBluetoothDevice.createRfcommSocketToServiceRecord(applicationUUID);
+            mBluetoothAdapter.cancelDiscovery();
+            mBluetoothSocket.connect();
+            SocketHandler.setSocket(mBluetoothSocket);
+
+            OutputStream writeOut = SocketHandler.getOStream();
+            // unique ID for phones --> In the case of tablets the best option would be to use a 64-bytes generator
+            //TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+            // Simplest approach so far wi-fi has to be on at all times.
+            String deviceId = ((WifiManager) getSystemService(Context.WIFI_SERVICE))
+                    .getConnectionInfo().getMacAddress();
+            byte[] devID = deviceId.getBytes();
+            writeOut.write(devID);
+            writeOut.flush();
+
+            mHandler.sendEmptyMessage(0);
+        }
+        catch (IOException eConnectException)
+        {
+            Log.d(TAG, "CouldNotConnectToSocket", eConnectException);
+            closeSocket(mBluetoothSocket);
+            return;
+        }
+    }
+
+    private void closeSocket(BluetoothSocket nOpenSocket)
+    {
+        try
+        {
+            nOpenSocket.close();
+            Log.d(TAG, "SocketClosed");
+        }
+        catch (IOException ex)
+        {
+            Log.d(TAG, "CouldNotCloseSocket");
+        }
+    }
+
+    private Handler mHandler = new Handler()
     {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
+        public void handleMessage(Message msg)
+        {
+            mBluetoothConnectProgressDialog.dismiss();
+            showToast("Device Connected");
 
-            if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action))
-            {
-                //Do something if connected
-                showToast("BT Connected");
-                spinner.setVisibility(View.GONE);
-                Intent choose = new Intent(MainPage.this, MainView.class);
-                startActivity(choose);
+            Intent goStatus = new Intent(getApplicationContext(), MainView.class);
+            goStatus.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(goStatus);
 
-                finish();
-
-            } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
-                //Do something if disconnected
-                showToast("BT Disconnected");
-            }else
-            {
-                showToast("Nothing Happened");
-            }
+            finish();
         }
     };
 
