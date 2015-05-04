@@ -8,17 +8,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 
-public class MainView extends Activity {
+public class MainView extends Activity implements Runnable{
 
     protected EditText speed;
     protected Button showspeed;
@@ -27,8 +28,8 @@ public class MainView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
 
-        speed = (EditText) findViewById(R.id.getcurspeed);
-        showspeed = (Button) findViewById(R.id.setcurspeed);
+        //speed = (EditText) findViewById(R.id.getcurspeed);
+        //showspeed = (Button) findViewById(R.id.setcurspeed);
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
@@ -48,11 +49,11 @@ public class MainView extends Activity {
                 }
             }
         };
-
         this.registerReceiver(BTReceiver, filter);
 
+        Thread getDataConnected = new Thread(this);
+        getDataConnected.start();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,6 +83,54 @@ public class MainView extends Activity {
         //Intent i = new Intent(this, MainView.class);
         //i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         //startActivity(i);
+    }
+
+    public void run()
+    {
+        InputStream istream = SocketHandler.getInSocket();
+        int chardata;
+        char c;
+
+        while(true)
+        {
+            try {
+                int size;
+                if((size = istream.available()) > 0) {
+
+                    byte[] wholedata = new byte[1];
+                    wholedata[5] = '\0';
+
+                    while(istream.available() > 0) {
+                        int result = istream.read(wholedata, 0, 1);
+                        c = new String(wholedata);
+                        Log.d("Debug", datastring);
+                        showToast(datastring);
+                    }
+
+                    /*char[] wholedata = new char[10];
+                    int k = 0;
+                    Log.d("Debug", "First");
+                    while ((chardata = istream.read()) != -1) {
+                        // converts integer to character
+                        Log.d("Debug", "Error");
+                        c = (char) chardata;
+                        wholedata[k] = c;
+                        k++;
+                        Log.d("Debug", "Second");
+                        if(k > 4)
+                        {
+                            break;
+                        }
+                    }
+
+                    Log.d("Debug", wholedata.toString());
+                    showToast(wholedata.toString());
+                    Log.d("Debug", "Fourth");*/
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void goProfile(View v)
@@ -136,9 +185,5 @@ public class MainView extends Activity {
                 }
             });
         }
-
-
-
     }
-
 }

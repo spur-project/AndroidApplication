@@ -11,8 +11,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +51,6 @@ public class MainPage extends Activity implements Runnable{
 
         spinner = (ProgressBar)findViewById(R.id.spinnerbar);
         spinner.setVisibility(View.GONE);
-
 
         final Handler handler = new Handler();
         Timer t = new Timer();

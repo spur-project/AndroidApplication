@@ -1,11 +1,7 @@
 package com.spurinnovations.spurinnovations;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +15,6 @@ public class ProfileView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
