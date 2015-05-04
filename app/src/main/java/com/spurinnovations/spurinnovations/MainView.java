@@ -88,44 +88,22 @@ public class MainView extends Activity implements Runnable{
     public void run()
     {
         InputStream istream = SocketHandler.getInSocket();
-        int chardata;
+        int totalread;
         char c;
 
         while(true)
         {
             try {
-                int size;
-                if((size = istream.available()) > 0) {
 
-                    byte[] wholedata = new byte[1];
-                    wholedata[5] = '\0';
+                if((istream.available()) > 0) {
 
-                    while(istream.available() > 0) {
-                        int result = istream.read(wholedata, 0, 1);
-                        c = new String(wholedata);
-                        Log.d("Debug", datastring);
-                        showToast(datastring);
+                    byte[] wholedata = new byte[1000];
+
+                    while ((totalread = istream.read(wholedata)) > 0) {
+
+                       String received = new String(wholedata, 0, totalread);
+                        threadToast(received);
                     }
-
-                    /*char[] wholedata = new char[10];
-                    int k = 0;
-                    Log.d("Debug", "First");
-                    while ((chardata = istream.read()) != -1) {
-                        // converts integer to character
-                        Log.d("Debug", "Error");
-                        c = (char) chardata;
-                        wholedata[k] = c;
-                        k++;
-                        Log.d("Debug", "Second");
-                        if(k > 4)
-                        {
-                            break;
-                        }
-                    }
-
-                    Log.d("Debug", wholedata.toString());
-                    showToast(wholedata.toString());
-                    Log.d("Debug", "Fourth");*/
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -146,6 +124,17 @@ public class MainView extends Activity implements Runnable{
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
     }
+
+    public void threadToast(final String toast)
+    {
+        runOnUiThread(new Runnable() {
+            public void run()
+            {
+                Toast.makeText(MainView.this, toast, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     public void setSpeed(View v)
     {

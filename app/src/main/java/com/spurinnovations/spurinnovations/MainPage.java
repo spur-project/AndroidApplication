@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
@@ -146,8 +147,8 @@ public class MainPage extends Activity implements Runnable{
             // unique ID for phones --> In the case of tablets the best option would be to use a 64-bytes generator
             //TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
             // Simplest approach so far wi-fi has to be on at all times.
-            String deviceId = ((WifiManager) getSystemService(Context.WIFI_SERVICE))
-                    .getConnectionInfo().getMacAddress();
+            String deviceId = ((BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE))
+                    .getAdapter().getAddress();
             byte[] devID = deviceId.getBytes();
             writeOut.write(devID);
             writeOut.flush();
