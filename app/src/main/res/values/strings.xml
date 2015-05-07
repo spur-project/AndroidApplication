@@ -8,5 +8,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile_view">ProfileView</string>
     <string name="title_activity_settings_view">SettingsView</string>
+    <string name="title_activity_impact_alerts">ImpactAlerts</string>
+    <string name="title_activity_s">S</string>
+    <string name="title_activity_profile">profile</string>
 
 </resources>
