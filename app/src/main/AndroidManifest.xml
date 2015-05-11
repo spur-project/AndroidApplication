@@ -52,14 +52,6 @@
             android:name=".ImpactAlerts"
             android:label="@string/title_activity_impact_alerts" >
         </activity>
-        <activity
-            android:name=".S"
-            android:label="@string/title_activity_s" >
-        </activity>
-        <activity
-            android:name=".profile"
-            android:label="@string/title_activity_profile" >
-        </activity>
     </application>
 
 </manifest>

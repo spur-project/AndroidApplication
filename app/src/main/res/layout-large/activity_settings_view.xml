@@ -16,10 +16,11 @@
         android:text="User Name (Role)"
         android:layout_alignParentTop="true"
         android:textColor="#ffffff"
-        android:textSize="30sp"
+        android:textSize="50sp"
         android:gravity="center"
-        android:layout_alignEnd="@+id/RadioGroup"
-        android:layout_alignStart="@+id/RadioGroup" />
+        android:layout_toEndOf="@+id/LeewaySpeed"
+        android:layout_alignStart="@+id/LeewaySpeed"
+        android:layout_alignEnd="@+id/RadioGroup" />
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -27,48 +28,54 @@
         android:layout_below="@id/UserName"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stay within speed limit"
-            android:textColor="#ffffff"
-            android:id="@+id/StayLimit"
-            android:textSize="15sp"
-            android:layout_below="@+id/UserName"
-            android:layout_alignParentStart="true" />
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stay within speed limit"
+        android:textColor="#ffffff"
+        android:id="@+id/StayLimit"
+        android:textSize="35sp"
+        android:layout_below="@+id/UserName"
+        android:layout_alignParentStart="true" />
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Allow some leeway"
-            android:textSize="15sp"
-            android:textColor="#ffffff"
-            android:id="@+id/Leeway"
-            android:layout_below="@+id/StayLimit"
-            android:layout_alignParentStart="true" />
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Allow some leeway"
+        android:textSize="35sp"
+        android:textColor="#ffffff"
+        android:id="@+id/Leeway"
+        android:layout_below="@+id/StayLimit"
+        android:layout_alignParentStart="true" />
     </RadioGroup>
 
     <EditText
         android:id="@+id/LeewaySpeed"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
         android:layout_marginLeft="50dp"
         android:layout_below="@id/RadioGroup"
         android:hint="10"
-        android:textSize="20dp"
-        android:textColor="#ffffff"/>
+        android:textSize="30sp"
+        android:textColor="#ffffff" />
+
     <TextView
-        android:layout_width="40dp"
+        android:layout_width="30dp"
         android:layout_height="40dp"
         android:text="Km/h"
         android:layout_below="@id/RadioGroup"
         android:layout_toRightOf="@id/LeewaySpeed"
         android:textColor="#ffffff"
-        android:textSize="15dp"
-        android:gravity="center"/>
+        android:textSize="25dp"
+        android:gravity="center"
+        android:id="@+id/textView"
+        android:layout_toStartOf="@+id/profile"
+        android:layout_above="@+id/checkBox" />
+
     <Button
         android:text="Status"
-        android:width="100dp"
+        android:width="150dp"
+        android:textSize="30sp"
         android:background="@drawable/roundbutton"
         android:id="@+id/status"
         android:layout_width="wrap_content"
@@ -79,7 +86,8 @@
 
     <Button
         android:text="Profile"
-        android:width="100dp"
+        android:width="150dp"
+        android:textSize="30sp"
         android:background="@drawable/roundbutton"
         android:id="@+id/profile"
         android:layout_width="wrap_content"
@@ -90,7 +98,8 @@
 
     <Button
         android:text="Settings"
-        android:width="100dp"
+        android:width="150dp"
+        android:textSize="30sp"
         android:background="@drawable/roundbutton"
         android:id="@+id/settings"
         android:layout_width="wrap_content"
@@ -104,6 +113,7 @@
         android:layout_height="wrap_content"
         android:text="Acceleration"
         android:textColor="#ffffff"
+        android:textSize="35sp"
         android:id="@+id/checkBox"
         android:layout_below="@+id/LeewaySpeed"
         android:layout_toStartOf="@+id/Role"
