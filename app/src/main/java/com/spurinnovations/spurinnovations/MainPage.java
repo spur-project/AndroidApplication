@@ -53,8 +53,13 @@ public class MainPage extends Activity implements Runnable{
 
         spinner = (ProgressBar)findViewById(R.id.spinnerbar);
         spinner.setVisibility(View.GONE);
+
         Map<TODint, Values> dataMap = new HashMap<TODint, Values>();
         DataMap.setMap(dataMap);
+
+        ByteToD valueM = new ByteToD();
+        Map<TODint, Integer> valueMap = valueM.getByteToD();
+        ValueMap.setMap(valueMap);
 
         final Handler handler = new Handler();
         Timer t = new Timer();
