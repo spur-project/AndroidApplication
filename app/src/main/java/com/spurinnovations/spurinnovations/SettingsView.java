@@ -7,13 +7,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Map;
+
 
 public class SettingsView extends Activity {
+
+    private Map<TODint, Values> dataMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_view);
+        dataMap = DataMap.getMap();
     }
 
     @Override

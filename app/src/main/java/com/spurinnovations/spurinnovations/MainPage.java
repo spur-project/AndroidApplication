@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,6 +53,8 @@ public class MainPage extends Activity implements Runnable{
 
         spinner = (ProgressBar)findViewById(R.id.spinnerbar);
         spinner.setVisibility(View.GONE);
+        Map<TODint, Values> dataMap = new HashMap<TODint, Values>();
+        DataMap.setMap(dataMap);
 
         final Handler handler = new Handler();
         Timer t = new Timer();

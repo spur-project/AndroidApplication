@@ -17,18 +17,21 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.Map;
 
 public class MainView extends Activity implements Runnable{
 
     protected EditText speed;
     protected Button showspeed;
+    protected ByteBuffer mainBuffer;
+    private Map<TODint, Values> dataMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
-
-        //speed = (EditText) findViewById(R.id.getcurspeed);
-        //showspeed = (Button) findViewById(R.id.setcurspeed);
+        dataMap = DataMap.getMap();
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
@@ -52,6 +55,14 @@ public class MainView extends Activity implements Runnable{
 
         Thread getDataConnected = new Thread(this);
         getDataConnected.start();
+
+        new Thread(
+                new Runnable() {
+                    public void run() {
+                        parseData();
+                    }
+                }
+        ).start();
     }
 
     @Override
@@ -87,12 +98,12 @@ public class MainView extends Activity implements Runnable{
     public void run()
     {
         InputStream istream = SocketHandler.getInSocket();
-        int totalread;
+        //int totalread;
         char c;
 
         while(true)
         {
-            try {
+            /*try {
 
                 if((istream.available()) > 0) {
 
@@ -106,6 +117,75 @@ public class MainView extends Activity implements Runnable{
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }*/
+
+            try {
+
+                byte[] rawdata = new byte[2];
+
+                if((istream.available()) > 0) {
+                    while ((istream.read(rawdata, 0, 1)) > -1) {
+
+                        mainBuffer.put(rawdata[0]);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void parseData()
+    {
+        byte code;
+        String hexstring;
+        int length = 0;
+        int packet_type;
+        int ToD;
+        byte[] data = new byte[256];
+
+        while(true)
+        {
+            code = mainBuffer.get();
+            hexstring = String.format("%02X ", code);
+
+            if(hexstring.equalsIgnoreCase("69"))
+            {
+                code = mainBuffer.get();
+                length = code & 0xff;
+
+                code = mainBuffer.get();
+                packet_type = code & 0xff;
+
+                switch(packet_type)
+                {
+                    case 0:
+
+                        break;
+
+                    case 255:
+
+                        code = mainBuffer.get();
+                        ToD = code & 0xff;
+
+                        if(ToD != 255)
+                        {
+                            mainBuffer.get(data, 0, length - 3);
+                            Values value = new Values(data, length-3);
+                            dataMap.put(NormalTOD.valueOf(ToD), value);
+                        }
+                        else
+                        {
+                            code = mainBuffer.get();
+                            ToD = code & 0xff;
+
+                                mainBuffer.get(data, 0, length - 4);
+                                Values value = new Values(data, length - 4);
+                                dataMap.put(NormalTOD.valueOf(ToD), value);
+                        }
+                        break;
+
+                }
             }
         }
     }
@@ -135,17 +215,16 @@ public class MainView extends Activity implements Runnable{
     }
 
 
-    public void setSpeed(View v)
+    public void setSpeed(double curspeed, double limit, double leeway )
     {
-        String speedstring = speed.getText().toString();
-        double curspeed = Double.parseDouble(speedstring);
+        String speedstring = Double.toString(curspeed);
 
-        if(curspeed < 80)
+        if(curspeed < limit)
         {
             showspeed.setText(speedstring);
             showspeed.setBackgroundResource(R.drawable.green1);
         }
-        else if(curspeed < 120)
+        else if(curspeed < limit + leeway / 2)
         {
             showspeed.setText(speedstring);
             showspeed.setBackgroundResource(R.drawable.yellowani);
