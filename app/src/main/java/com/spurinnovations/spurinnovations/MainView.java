@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Map;
@@ -118,7 +120,7 @@ public class MainView extends Activity implements Runnable{
                 e.printStackTrace();
             }*/
 
-/*            try {
+            try {
 
                 byte[] rawdata = new byte[2];
 
@@ -130,18 +132,20 @@ public class MainView extends Activity implements Runnable{
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
     }
 
     public void parseData()
     {
-       /* byte code;
-        String hexstring;
+        byte code;
         int length = 0;
         int packet_type;
+        int datasize;
         int ToD;
         byte[] data = new byte[256];
+        String hexstring;
+        Map<TODint, Integer> values = ValueMap.getMap();
 
         while(true)
         {
@@ -164,29 +168,40 @@ public class MainView extends Activity implements Runnable{
 
                     case 255:
 
-                        code = mainBuffer.get();
-                        ToD = code & 0xff;
-
-                        if(ToD != 255)
-                        {
-                            mainBuffer.get(data, 0, length - 3);
-                            Values value = new Values(data, length-3);
-                            dataMap.put(NormalTOD.valueOf(ToD), value);
-                        }
-                        else
+                        while(true)
                         {
                             code = mainBuffer.get();
+                            hexstring = String.format("%02X ", code);
                             ToD = code & 0xff;
 
-                                mainBuffer.get(data, 0, length - 4);
-                                Values value = new Values(data, length - 4);
+                            if(hexstring.equalsIgnoreCase("96"))
+                            {
+                                break;
+                            }
+
+                            if (ToD != 255) {
+                                datasize = values.get(NormalTOD.valueOf(ToD));
+                                mainBuffer.get(data, 0, datasize);
+                                Values value = new Values(data, datasize);
                                 dataMap.put(NormalTOD.valueOf(ToD), value);
+                            } else {
+
+                                code = mainBuffer.get();
+                                ToD = code & 0xff;
+                                datasize = values.get(NormalTOD.valueOf(ToD));
+
+                                mainBuffer.get(data, 0, datasize);
+                                Values value = new Values(data, datasize);
+                                dataMap.put(NormalTOD.valueOf(ToD), value);
+                            }
                         }
+
+
                         break;
 
                 }
             }
-        }*/
+        }
     }
 
     public void goProfile(View v)
