@@ -1058,6 +1058,24 @@
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+                    <TableRow>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Max acceleration rate limit"
+                            android:textColor="#ffffff"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="15sp"/>
+                    </TableRow>
                     <TableRow>
                         <TextView
                             android:layout_width="wrap_content"
