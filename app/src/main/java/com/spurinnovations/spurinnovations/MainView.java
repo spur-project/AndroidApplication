@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Map;
@@ -119,7 +118,7 @@ public class MainView extends Activity implements Runnable{
                 e.printStackTrace();
             }*/
 
-            try {
+/*            try {
 
                 byte[] rawdata = new byte[2];
 
@@ -131,13 +130,13 @@ public class MainView extends Activity implements Runnable{
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 
     public void parseData()
     {
-        byte code;
+       /* byte code;
         String hexstring;
         int length = 0;
         int packet_type;
@@ -187,7 +186,7 @@ public class MainView extends Activity implements Runnable{
 
                 }
             }
-        }
+        }*/
     }
 
     public void goProfile(View v)

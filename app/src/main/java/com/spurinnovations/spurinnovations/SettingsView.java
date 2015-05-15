@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.Map;
 
@@ -59,5 +60,45 @@ public class SettingsView extends Activity {
         //Intent i = new Intent(this, SettingsView.class);
         //i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         //startActivity(i);
+    }
+
+    public void showAddUser(View v)
+    {
+        LinearLayout adduser = (LinearLayout) findViewById(R.id.AddUser);
+        if (adduser.getVisibility() == View.VISIBLE) {
+            adduser.setVisibility(View.GONE);
+        } else {
+            adduser.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showAcceration(View v)
+    {
+        LinearLayout addacceleration = (LinearLayout) findViewById(R.id.AddAcceleration);
+        if (addacceleration.getVisibility() == View.VISIBLE) {
+            addacceleration.setVisibility(View.GONE);
+        } else {
+            addacceleration.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showAccerationRate(View v)
+    {
+        LinearLayout addaccelerationrate = (LinearLayout) findViewById(R.id.AddAccelerationRate);
+        if (addaccelerationrate.getVisibility() == View.VISIBLE) {
+            addaccelerationrate.setVisibility(View.GONE);
+        } else {
+            addaccelerationrate.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showSpeed(View v)
+    {
+        LinearLayout addspeed = (LinearLayout) findViewById(R.id.AddSpeed);
+        if (addspeed.getVisibility() == View.VISIBLE) {
+            addspeed.setVisibility(View.GONE);
+        } else {
+            addspeed.setVisibility(View.VISIBLE);
+        }
     }
 }
