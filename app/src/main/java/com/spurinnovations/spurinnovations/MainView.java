@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.renderscript.Sampler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +19,26 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
 public class MainView extends Activity implements Runnable{
 
-    protected EditText speed;
-    protected Button showspeed;
     protected ByteBuffer mainBuffer;
     private Map<TODint, Values> dataMap;
+
+    private static final String HEXFORMAT = "%02X";
+    private static final byte EXTENDED_TOD = (byte) 0xff;
+    private static final byte REQUEST_PACKET = (byte) 0x00;
+    private static final byte BACKOFF_PACKET = (byte) 0x80;
+    private static final byte UPDATE_PACKET = (byte) 0xff;
+    private static final byte START_SEQUENCE = (byte) 0x02;
+    private static final byte END_SEQUENCE = (byte) 0x04;
+    private static final byte ESCAPE_SEQUENCE = (byte) 0x1B;
+    private static final int BYTEMASK = 0xff;
+    //private static final String STARTSEQUENCE = "02";
+    //private static final String ENDSEQUENCE = "04";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +72,11 @@ public class MainView extends Activity implements Runnable{
         new Thread(
                 new Runnable() {
                     public void run() {
-                        parseData();
+                        try {
+                            parseData();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
         ).start();
@@ -136,8 +152,7 @@ public class MainView extends Activity implements Runnable{
         }
     }
 
-    public void parseData()
-    {
+    public void parseData() throws InterruptedException {
         byte code;
         int length = 0;
         int packet_type;
@@ -149,58 +164,96 @@ public class MainView extends Activity implements Runnable{
 
         while(true)
         {
-            code = mainBuffer.get();
-            hexstring = String.format("%02X ", code);
-
-            if(hexstring.equalsIgnoreCase("69"))
-            {
-                code = mainBuffer.get();
-                length = code & 0xff;
-
-                code = mainBuffer.get();
-                packet_type = code & 0xff;
-
-                switch(packet_type)
+            if(mainBuffer.hasRemaining()) {
+                try {
+                    code = mainBuffer.get();
+                    Thread.sleep(100);
+                }
+                catch (BufferUnderflowException e)
                 {
-                    case 0:
+                    Log.d("Debug", "NO DATA 0");
+                    code = (byte) 0x00;
+                }
+                //hexstring = String.format(HEXFORMAT, code);
 
-                        break;
+                if (code == START_SEQUENCE) {
+                    try {
+                        code = mainBuffer.get();
+                    }
+                    catch (BufferUnderflowException e)
+                    {
+                        Log.d("Debug", "NO DATA 1");
+                        code = (byte) 0x00;
+                    }
 
-                    case 255:
+                    length = code & BYTEMASK;
 
-                        while(true)
-                        {
-                            code = mainBuffer.get();
-                            hexstring = String.format("%02X ", code);
-                            ToD = code & 0xff;
+                    try {
+                        code = mainBuffer.get();
+                    }
+                    catch (BufferUnderflowException e)
+                    {
+                        Log.d("Debug", "NO DATA 2");
+                        code = (byte) 0x00;
+                    }
+                        //packet_type = code & BYTEMASK;
 
-                            if(hexstring.equalsIgnoreCase("96"))
-                            {
-                                break;
+                    switch (code) {
+                        case REQUEST_PACKET:
+
+                            break;
+
+                        case BACKOFF_PACKET:
+
+                            break;
+
+                        case UPDATE_PACKET:
+
+                            while (true) {
+                                try {
+                                    code = mainBuffer.get();
+                                }
+                                catch (BufferUnderflowException e)
+                                {
+                                    Log.d("Debug", "NO DATA 3");
+                                    code = (byte) 0x00;
+                                }
+                                //hexstring = String.format(HEXFORMAT, code);
+                                ToD = code & BYTEMASK;
+
+                                if (code == END_SEQUENCE) {
+                                    break;
+                                }
+
+                                if (code != EXTENDED_TOD) {
+                                    datasize = values.get(NormalTOD.valueOf(ToD));
+                                    mainBuffer.get(data, 0, datasize);
+                                    Values value = new Values(data, datasize);
+                                    dataMap.put(NormalTOD.valueOf(ToD), value);
+                                } else {
+                                    try {
+                                        code = mainBuffer.get();
+                                    }
+                                    catch (BufferUnderflowException e)
+                                    {
+                                        Log.d("Debug", "NO DATA 4");
+                                        code = (byte) 0x00;
+                                    }
+                                    ToD = code & 0xff;
+                                    datasize = values.get(NormalTOD.valueOf(ToD));
+
+                                    mainBuffer.get(data, 0, datasize);
+                                    Values value = new Values(data, datasize);
+                                    dataMap.put(NormalTOD.valueOf(ToD), value);
+                                }
                             }
 
-                            if (ToD != 255) {
-                                datasize = values.get(NormalTOD.valueOf(ToD));
-                                mainBuffer.get(data, 0, datasize);
-                                Values value = new Values(data, datasize);
-                                dataMap.put(NormalTOD.valueOf(ToD), value);
-                            } else {
+                            break;
 
-                                code = mainBuffer.get();
-                                ToD = code & 0xff;
-                                datasize = values.get(NormalTOD.valueOf(ToD));
-
-                                mainBuffer.get(data, 0, datasize);
-                                Values value = new Values(data, datasize);
-                                dataMap.put(NormalTOD.valueOf(ToD), value);
-                            }
-                        }
-
-
-                        break;
-
+                    }
                 }
             }
+
         }
     }
 
@@ -229,7 +282,7 @@ public class MainView extends Activity implements Runnable{
     }
 
 
-    public void setSpeed(double curspeed, double limit, double leeway )
+   /* public void setSpeed(double curspeed, double limit, double leeway )
     {
         String speedstring = Double.toString(curspeed);
 
@@ -266,5 +319,5 @@ public class MainView extends Activity implements Runnable{
                 }
             });
         }
-    }
+    }*/
 }

@@ -13,13 +13,28 @@ public class ByteToD {
     ByteToD()
     {
 
-        ByteToD.put(NormalTOD.SPEED, 1);
-        ByteToD.put(NormalTOD.ACCELERATION, 1);
-        ByteToD.put(NormalTOD.BREAKING, 1);
-        ByteToD.put(NormalTOD.CORNERING, 1);
-        ByteToD.put(NormalTOD.SPEED_LIMIT, 1);
-        ByteToD.put(NormalTOD.IMPACT_TIME, 1);
-        ByteToD.put(NormalTOD.IMPACT_OBJECT, 1);
+        ByteToD.put(NormalTOD.ANDROID_DEVICE_PRIVILEGES, 2);
+        ByteToD.put(NormalTOD.DEVICE_CONFIGURATION, 2);
+        ByteToD.put(NormalTOD.CONTROL_STATUS, 2);
+        ByteToD.put(NormalTOD.CAMERA_STATUS, 2);
+        ByteToD.put(NormalTOD.VEHICLE_STATUS, 2);
+        ByteToD.put(NormalTOD.VEHICLE_SPEED, 2);
+        ByteToD.put(NormalTOD.ACCELERATORPEDAL_ACTUALPERCENT, 2);
+        ByteToD.put(NormalTOD.ACCELERATORPEDAL_MAXALLOWPERCENT, 2);
+        ByteToD.put(NormalTOD.VEHICLE_ACCELERATION, 2);
+        ByteToD.put(NormalTOD.VEHICLE_LONGITUDIONAL_ACC, 2);
+        ByteToD.put(NormalTOD.VEHICLE_CORNERING_ACCELERATION, 2);
+        ByteToD.put(NormalTOD.POSTED_SPEED_LIMIT, 1);
+        ByteToD.put(NormalTOD.ELAPSED_TIME_SPEED_LIMIT, 2);
+        ByteToD.put(NormalTOD.HEADWAY, 1);
+        ByteToD.put(NormalTOD.BATTERY_VOLTAGE, 1);
+        ByteToD.put(NormalTOD.LATITUDE,  4);
+        ByteToD.put(NormalTOD.LONGITUDE, 4);
+        ByteToD.put(NormalTOD.ALTITUDE, 2);
+        ByteToD.put(NormalTOD.SOFTWARE_REVISION, 2);
+        ByteToD.put(NormalTOD.ACCELERATOR_PEDAL_CONFIG, 2);
+        ByteToD.put(NormalTOD.BRAKE_PEDAL_PERCENT, 2);
+        ByteToD.put(NormalTOD.ODOMETER, 4);
         ByteToD.put(ExtendedTOD.PIDS_SUPPORTED_1_20, 4);
         ByteToD.put(ExtendedTOD.MONITOR_DTC, 4);
         ByteToD.put(ExtendedTOD.FREEZE_DTC, 2);
