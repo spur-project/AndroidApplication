@@ -17,24 +17,20 @@ public class ValidatePacket {
     private static final byte END_SEQUENCE = (byte) 0x04;
     private static final byte ESCAPE_SEQUENCE = (byte) 0x1B;
     private static final int BYTEMASK = 0xff;
-    private static final byte EXTENDED_TOD = (byte) 0x7f;
-    private static final byte EXTENDED_OBD = (byte) 0x81;
+
 
     private byte[] dataBuffer;
     private byte[] bytebuffer;
     private int packetlength;
-    ByteToD valueList;
-    Map<TODint, Integer> values;
 
     ValidatePacket()
     {
-        valueList = new ByteToD();
-        values = valueList.getByteToD();
+
     }
 
     public boolean validate(byte[] buffer, int length) {
         dataBuffer = new byte[length];
-        int datasize = 0;
+        byte[] noContent = {END_SEQUENCE};
         int currentbyte_read = 0;
         int currentbyte_write = 0;
 
@@ -62,7 +58,14 @@ public class ValidatePacket {
 
                         if (buffer[++currentbyte_read] == END_SEQUENCE && currentbyte_read == packetlength) {
 
-                            bytebuffer = Arrays.copyOf(dataBuffer, currentbyte_write - 1);
+                            if(packetlength > 4) {
+                                bytebuffer = Arrays.copyOf(dataBuffer, currentbyte_write - 1);
+                            }
+                            else
+                            {
+                                bytebuffer = Arrays.copyOf(noContent, 1);
+                            }
+
                             break;
                         }
 
@@ -70,75 +73,15 @@ public class ValidatePacket {
                         {
                             return false;
                         }
-
-                        if (buffer[currentbyte_read] <= EXTENDED_TOD)
+                        else
                         {
-
-                            datasize = values.get(NormalTOD.valueOf(buffer[currentbyte_read] & BYTEMASK));
-                            dataBuffer[currentbyte_write++] = buffer[currentbyte_read];
-
-                            int i = 0;
-                            while(i < datasize)
+                            if(buffer[currentbyte_read] == ESCAPE_SEQUENCE)
                             {
-                                if(buffer[++currentbyte_read] == ESCAPE_SEQUENCE)
-                                {
-                                    dataBuffer[currentbyte_write++] = (byte) (buffer[++currentbyte_read] - 1);
-
-                                    if(checkUnexpectedSequence(buffer[currentbyte_read]))
-                                    {
-                                        return false;
-                                    }
-                                    i++;
-                                }
-                                else
-                                {
-                                    dataBuffer[currentbyte_write++] = buffer[currentbyte_read];
-
-                                    if(checkUnexpectedSequence(buffer[currentbyte_read]))
-                                    {
-                                        return false;
-                                    }
-                                    i++;
-                                }
+                                dataBuffer[currentbyte_write++] = (byte) (buffer[++currentbyte_read] - 1);
                             }
-
-                        } else {
-                            dataBuffer[currentbyte_write++] = buffer[currentbyte_read];
-
-                            switch(buffer[currentbyte_read])
+                            else
                             {
-                                case EXTENDED_OBD:
-
-                                    datasize = values.get(obdTOD.valueOf(buffer[++currentbyte_read] & BYTEMASK));
-                                    dataBuffer[currentbyte_write++] = buffer[currentbyte_read];
-
-                                    break;
-                            }
-
-                            int i = 0;
-
-                            while(i < datasize)
-                            {
-                                if(buffer[++currentbyte_read] == ESCAPE_SEQUENCE)
-                                {
-                                    dataBuffer[currentbyte_write++] = (byte) (buffer[++currentbyte_read] - 1);
-
-                                    if(checkUnexpectedSequence(buffer[currentbyte_read]))
-                                    {
-                                        return false;
-                                    }
-                                    i++;
-                                }
-                                else
-                                {
-                                    dataBuffer[currentbyte_write++] = buffer[currentbyte_read];
-
-                                    if(checkUnexpectedSequence(buffer[currentbyte_read]))
-                                    {
-                                        return false;
-                                    }
-                                    i++;
-                                }
+                                dataBuffer[currentbyte_write++] = buffer[currentbyte_read];
                             }
                         }
                     }

@@ -16,12 +16,12 @@ public class Values {
         this.length = length;
     }
 
-    byte[] getValue()
+    public byte[] getValue()
     {
         return value;
     }
 
-    int getLength()
+    public int getLength()
     {
         return length;
     }

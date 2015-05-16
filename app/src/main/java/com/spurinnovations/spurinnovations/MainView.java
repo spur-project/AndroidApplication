@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +28,7 @@ public class MainView extends Activity implements Runnable{
 
     protected ByteBufferSem mainBuffer;
     private Map<TODint, Values> dataMap;
+    Handler handler;
 
     private static final int MAX_PACKET_SIZE = 256;
 
@@ -35,6 +37,7 @@ public class MainView extends Activity implements Runnable{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
         dataMap = DataMap.getMap();
+        handler = new Handler();
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
@@ -60,13 +63,16 @@ public class MainView extends Activity implements Runnable{
         getDataConnected.start();
 
 
-        new Thread(
-                new Runnable() {
+        Thread showdata = new Thread(){
+            public void run() {
+                handler.post(new Runnable() {
                     public void run() {
-                            showData();
+
                     }
-                }
-        ).start();
+                });
+            }
+        };
+        showdata.start();
     }
 
     @Override
