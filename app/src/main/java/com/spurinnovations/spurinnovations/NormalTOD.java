@@ -30,7 +30,7 @@ public enum NormalTOD implements TODint
     ACCELERATOR_PEDAL_CONFIG(67),
     BRAKE_PEDAL_PERCENT(68),
     ODOMETER(69),
-    OBD(101);
+    OBD(255);
 
     private int normalTOD;
 
