@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -27,8 +28,14 @@ import java.util.Map;
 public class MainView extends Activity implements Runnable{
 
     protected ByteBufferSem mainBuffer;
-    private Map<TODint, Values> dataMap;
-    Handler handler;
+    private Map<TODint, String> dataMap;
+
+    private TextView speed_limit;
+    private TextView vehicle_speed;
+    private TextView time_elapsed;
+    private TextView braking_acc;
+    private TextView forward_acc;
+    private TextView cornering_acc;
 
     private static final int MAX_PACKET_SIZE = 256;
 
@@ -37,7 +44,14 @@ public class MainView extends Activity implements Runnable{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
         dataMap = DataMap.getMap();
-        handler = new Handler();
+
+        speed_limit = (TextView) findViewById(R.id.SpeedLimit);
+        vehicle_speed = (TextView) findViewById(R.id.curSpeed);
+        time_elapsed = (TextView) findViewById(R.id.Timer);
+        braking_acc = (TextView) findViewById(R.id.Braking);
+        forward_acc = (TextView) findViewById(R.id.Acceleration);
+        cornering_acc = (TextView) findViewById(R.id.Cornering);
+
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
@@ -61,18 +75,6 @@ public class MainView extends Activity implements Runnable{
 
         Thread getDataConnected = new Thread(this);
         getDataConnected.start();
-
-
-        Thread showdata = new Thread(){
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-
-                    }
-                });
-            }
-        };
-        showdata.start();
     }
 
     @Override
@@ -143,9 +145,43 @@ public class MainView extends Activity implements Runnable{
         }
     }
 
-    public void showData()
+    public void showData(final TODint valueTOD)
     {
+        runOnUiThread(new Runnable() {
+            public void run()
+            {
 
+                if(dataMap.get(valueTOD) != null) {
+
+                    if (valueTOD == NormalTOD.POSTED_SPEED_LIMIT) {
+
+                        speed_limit.setText(dataMap.get(NormalTOD.POSTED_SPEED_LIMIT));
+                    }
+
+                    if (valueTOD == NormalTOD.VEHICLE_SPEED) {
+
+                        vehicle_speed.setText(dataMap.get(NormalTOD.VEHICLE_SPEED));
+                    }
+
+                    if (valueTOD == NormalTOD.ELAPSED_TIME_SPEED_LIMIT) {
+
+                        time_elapsed.setText(dataMap.get(NormalTOD.ELAPSED_TIME_SPEED_LIMIT));
+                    }
+
+                    if (valueTOD == NormalTOD.VEHICLE_ACCELERATION) {
+                        short acceleration = Short.valueOf(dataMap.get(NormalTOD.VEHICLE_ACCELERATION));
+                        int braking = acceleration * -1;
+                        braking_acc.setText(Integer.toString(braking));
+                        forward_acc.setText(Short.toString(acceleration));
+                    }
+
+                    if (valueTOD == NormalTOD.VEHICLE_CORNERING_ACCELERATION) {
+                        cornering_acc.setText(dataMap.get(NormalTOD.VEHICLE_CORNERING_ACCELERATION));
+                    }
+                }
+
+            }
+        });
     }
 
     public void goProfile(View v)

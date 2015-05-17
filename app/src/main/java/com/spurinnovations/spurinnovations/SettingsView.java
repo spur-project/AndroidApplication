@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class SettingsView extends Activity {
 
-    private Map<TODint, Values> dataMap;
+    private Map<TODint, String> dataMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

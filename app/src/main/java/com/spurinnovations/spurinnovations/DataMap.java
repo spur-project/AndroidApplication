@@ -8,12 +8,12 @@ import java.util.Map;
  */
 public class DataMap {
 
-    private static Map<TODint, Values> map;
+    private static Map<TODint, String> map;
 
-    public static synchronized Map<TODint, Values> getMap(){
+    public static synchronized Map<TODint, String> getMap(){
         return map;
     }
-    public static synchronized void setMap(Map<TODint, Values> map){
+    public static synchronized void setMap(Map<TODint, String> map){
         DataMap.map = map;
     }
 }
