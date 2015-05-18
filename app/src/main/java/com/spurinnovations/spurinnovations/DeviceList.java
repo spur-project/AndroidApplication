@@ -19,7 +19,6 @@ import java.util.Set;
 
 public class DeviceList extends Activity
 {
-    protected static final String TAG = "TAG";
     private BluetoothAdapter mBluetoothAdapter;
     private ArrayAdapter<String> mPairedDevicesArrayAdapter;
 
@@ -72,7 +71,7 @@ public class DeviceList extends Activity
             mBluetoothAdapter.cancelDiscovery();
             String mDeviceInfo = ((TextView) mView).getText().toString();
             String mDeviceAddress = mDeviceInfo.substring(mDeviceInfo.length() - 17);
-            Log.v(TAG, "Device_Address " + mDeviceAddress);
+            Log.v(ConstantDefinitions.TAG, "Device_Address " + mDeviceAddress);
 
             Bundle mBundle = new Bundle();
             mBundle.putString("DeviceAddress", mDeviceAddress);

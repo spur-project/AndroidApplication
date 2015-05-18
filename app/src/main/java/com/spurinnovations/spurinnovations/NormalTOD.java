@@ -47,4 +47,9 @@ public enum NormalTOD implements TODint
     public static NormalTOD valueOf(int NormalTOD) {
         return map.get(NormalTOD);
     }
+
+    public int showByteValue()
+    {
+        return normalTOD;
+    }
 }

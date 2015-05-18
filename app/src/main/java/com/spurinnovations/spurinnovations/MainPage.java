@@ -33,9 +33,6 @@ import java.util.UUID;
 public class MainPage extends Activity implements Runnable{
 
     protected ProgressBar spinner;
-    protected static final String TAG = "TAG";
-    private static final int REQUEST_CONNECT_DEVICE = 1;
-    private static final int REQUEST_ENABLE_BT = 2;
     BluetoothAdapter mBluetoothAdapter;
     //default uuid for serial to bt communication SPP
     private UUID applicationUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -56,6 +53,9 @@ public class MainPage extends Activity implements Runnable{
 
         Map<TODint, String> dataMap = new HashMap<TODint, String>();
         DataMap.setMap(dataMap);
+
+        ParsePacket packet_parser = new ParsePacket(DataMap.getMap());
+        DataMap.setParsingPacket(packet_parser);
 
         ByteToD valueM = new ByteToD();
         Map<TODint, Integer> valueMap = valueM.getByteToD();
@@ -78,13 +78,13 @@ public class MainPage extends Activity implements Runnable{
                             if (!mBluetoothAdapter.isEnabled())
                             {
                                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                                startActivityForResult(enableBtIntent, ConstantDefinitions.REQUEST_ENABLE_BT);
                             }
                             else
                             {
                                 ListPairedDevices();
                                 Intent connectIntent = new Intent(MainPage.this, DeviceList.class);
-                                startActivityForResult(connectIntent, REQUEST_CONNECT_DEVICE);
+                                startActivityForResult(connectIntent, ConstantDefinitions.REQUEST_CONNECT_DEVICE);
                             }
                         }
                     }
@@ -100,12 +100,12 @@ public class MainPage extends Activity implements Runnable{
 
         switch (mRequestCode)
         {
-            case REQUEST_CONNECT_DEVICE:
+            case ConstantDefinitions.REQUEST_CONNECT_DEVICE:
                 if (mResultCode == Activity.RESULT_OK)
                 {
                     Bundle mExtra = mDataIntent.getExtras();
                     String mDeviceAddress = mExtra.getString("DeviceAddress");
-                    Log.v(TAG, "Coming incoming address " + mDeviceAddress);
+                    Log.v(ConstantDefinitions.TAG, "Coming incoming address " + mDeviceAddress);
                     mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
                     mBluetoothConnectProgressDialog = ProgressDialog.show(this, "Connecting...",
                             mBluetoothDevice.getName() + " : " + mBluetoothDevice.getAddress(), true, false);
@@ -115,12 +115,12 @@ public class MainPage extends Activity implements Runnable{
                 }
                 break;
 
-            case REQUEST_ENABLE_BT:
+            case ConstantDefinitions.REQUEST_ENABLE_BT:
                 if (mResultCode == Activity.RESULT_OK)
                 {
                     ListPairedDevices();
                     Intent connectIntent = new Intent(MainPage.this, DeviceList.class);
-                    startActivityForResult(connectIntent, REQUEST_CONNECT_DEVICE);
+                    startActivityForResult(connectIntent, ConstantDefinitions.REQUEST_CONNECT_DEVICE);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ public class MainPage extends Activity implements Runnable{
         {
             for (BluetoothDevice mDevice : mPairedDevices)
             {
-                Log.v(TAG, "PairedDevices: " + mDevice.getName() + " " + mDevice.getAddress());
+                Log.v(ConstantDefinitions.TAG, "PairedDevices: " + mDevice.getName() + " " + mDevice.getAddress());
             }
         }
     }
@@ -165,7 +165,7 @@ public class MainPage extends Activity implements Runnable{
         }
         catch (IOException eConnectException)
         {
-            Log.d(TAG, "CouldNotConnectToSocket", eConnectException);
+            Log.d(ConstantDefinitions.TAG, "CouldNotConnectToSocket", eConnectException);
             closeSocket(mBluetoothSocket);
             return;
         }
@@ -176,11 +176,11 @@ public class MainPage extends Activity implements Runnable{
         try
         {
             nOpenSocket.close();
-            Log.d(TAG, "SocketClosed");
+            Log.d(ConstantDefinitions.TAG, "SocketClosed");
         }
         catch (IOException ex)
         {
-            Log.d(TAG, "CouldNotCloseSocket");
+            Log.d(ConstantDefinitions.TAG, "CouldNotCloseSocket");
         }
     }
 

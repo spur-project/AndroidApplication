@@ -29,6 +29,15 @@ public class MainView extends Activity implements Runnable{
 
     protected ByteBufferSem mainBuffer;
     private Map<TODint, String> dataMap;
+    ParsePacket packetparser;
+
+    private TODint[] updateRequests = { NormalTOD.POSTED_SPEED_LIMIT,
+                                        NormalTOD.VEHICLE_SPEED,
+                                        NormalTOD.VEHICLE_SPEED,
+                                        NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
+                                        NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
+                                        NormalTOD.VEHICLE_ACCELERATION,
+                                        NormalTOD.VEHICLE_CORNERING_ACCELERATION};
 
     private TextView speed_limit;
     private TextView vehicle_speed;
@@ -36,6 +45,10 @@ public class MainView extends Activity implements Runnable{
     private TextView braking_acc;
     private TextView forward_acc;
     private TextView cornering_acc;
+    private TextView alert_text;
+
+    private int current_limit;
+    private int current_leeway;
 
     private static final int MAX_PACKET_SIZE = 256;
 
@@ -44,13 +57,25 @@ public class MainView extends Activity implements Runnable{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
         dataMap = DataMap.getMap();
+        packetparser = DataMap.getParsingPacket();
+        current_limit = 0;
 
+        //just for testing
+        current_leeway = 20;
+
+        alert_text = (TextView) findViewById(R.id.Alert);
         speed_limit = (TextView) findViewById(R.id.SpeedLimit);
         vehicle_speed = (TextView) findViewById(R.id.curSpeed);
         time_elapsed = (TextView) findViewById(R.id.Timer);
         braking_acc = (TextView) findViewById(R.id.Braking);
         forward_acc = (TextView) findViewById(R.id.Acceleration);
         cornering_acc = (TextView) findViewById(R.id.Cornering);
+
+        requestPacket requestUpdates = new requestPacket();
+        for(TODint TOD : updateRequests) {
+            requestUpdates.addData((byte)TOD.showByteValue());
+        }
+        requestUpdates.sendPacket(SocketHandler.getOStream());
 
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
@@ -112,7 +137,7 @@ public class MainView extends Activity implements Runnable{
         InputStream istream = SocketHandler.getInSocket();
         mainBuffer = new ByteBufferSem(MAX_PACKET_SIZE);
         ValidatePacket packetValidator = new ValidatePacket();
-        ParsePacket packetparser = new ParsePacket(dataMap);
+
 
         char c;
 
@@ -135,6 +160,12 @@ public class MainView extends Activity implements Runnable{
                             if(packetValidator.validate(mainBuffer.getData(), mainBuffer.getElementsNumber()))
                             {
                                 packetparser.parseData(packetValidator.getValidatedPacket());
+
+                                if(packetparser.getMainViewUpdates().size() > 0) {
+                                    for (TODint TOD : packetparser.getMainViewUpdates()) {
+                                        showData(TOD);
+                                    }
+                                }
                             }
                         }
                     }
@@ -155,12 +186,72 @@ public class MainView extends Activity implements Runnable{
 
                     if (valueTOD == NormalTOD.POSTED_SPEED_LIMIT) {
 
-                        speed_limit.setText(dataMap.get(NormalTOD.POSTED_SPEED_LIMIT));
+                        current_limit = Integer.valueOf(dataMap.get(NormalTOD.POSTED_SPEED_LIMIT));
+                        speed_limit.setText(Integer.toString(current_limit));
+
                     }
 
                     if (valueTOD == NormalTOD.VEHICLE_SPEED) {
 
-                        vehicle_speed.setText(dataMap.get(NormalTOD.VEHICLE_SPEED));
+                        int current_speed = Integer.valueOf(dataMap.get(NormalTOD.VEHICLE_SPEED));
+                        vehicle_speed.setText(Integer.toString(current_speed));
+
+                        if(current_limit > 0) {
+
+                            if (current_speed <= current_limit) {
+
+                                vehicle_speed.setBackgroundResource(R.drawable.green1);
+
+                            } else if (current_speed <= current_limit + current_leeway / 2) {
+
+                                vehicle_speed.setBackgroundResource(R.drawable.yellowani);
+                                alert_text.setText("Over the Speed Limit");
+
+                                vehicle_speed.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AnimationDrawable frameAnimation =
+                                                (AnimationDrawable) vehicle_speed.getBackground();
+                                        frameAnimation.start();
+                                    }
+                                });
+                            }
+                            else if(current_speed <= current_limit + current_leeway)
+                            {
+
+                                vehicle_speed.setBackgroundResource(R.drawable.yellowani);
+                                alert_text.setText("Please Slow Down");
+
+                                vehicle_speed.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AnimationDrawable frameAnimation =
+                                                (AnimationDrawable) vehicle_speed.getBackground();
+                                        frameAnimation.start();
+                                    }
+                                });
+                            }
+                            else if(current_speed <= current_limit + current_leeway * 2)
+                            {
+                                vehicle_speed.setBackgroundResource(R.drawable.redani);
+                                alert_text.setText("Going Past Leeway");
+
+                                vehicle_speed.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AnimationDrawable frameAnimation =
+                                                (AnimationDrawable) vehicle_speed.getBackground();
+                                        frameAnimation.start();
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Intent goAlert = new Intent(MainView.this, ImpactAlerts.class);
+                                goAlert.putExtra("alert", ConstantDefinitions.STOP_SPEEDING);
+                                startActivity(goAlert);
+                            }
+                        }
                     }
 
                     if (valueTOD == NormalTOD.ELAPSED_TIME_SPEED_LIMIT) {
@@ -213,38 +304,6 @@ public class MainView extends Activity implements Runnable{
     {
         String speedstring = Double.toString(curspeed);
 
-        if(curspeed < limit)
-        {
-            showspeed.setText(speedstring);
-            showspeed.setBackgroundResource(R.drawable.green1);
-        }
-        else if(curspeed < limit + leeway / 2)
-        {
-            showspeed.setText(speedstring);
-            showspeed.setBackgroundResource(R.drawable.yellowani);
 
-            showspeed.post(new Runnable() {
-                @Override
-                public void run() {
-                    AnimationDrawable frameAnimation =
-                            (AnimationDrawable) showspeed.getBackground();
-                    frameAnimation.start();
-                }
-            });
-        }
-        else
-        {
-            showspeed.setText(speedstring);
-            showspeed.setBackgroundResource(R.drawable.redani);
-
-            showspeed.post(new Runnable() {
-                @Override
-                public void run() {
-                    AnimationDrawable frameAnimation =
-                            (AnimationDrawable) showspeed.getBackground();
-                    frameAnimation.start();
-                }
-            });
-        }
     }*/
 }

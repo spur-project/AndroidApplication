@@ -7,8 +7,6 @@ import java.util.Arrays;
  */
 public class ByteBufferSem {
 
-    private static final byte END_SEQUENCE = (byte) 0x04;
-
     private byte[] mainBuffer;
     private int position;
     private int elementsNumber;
@@ -29,7 +27,7 @@ public class ByteBufferSem {
 
     public void write(byte data)
     {
-        if(data == END_SEQUENCE)
+        if(data == ConstantDefinitions.END_SEQUENCE)
         {
             mainBuffer[position] = data;
             elementsNumber++;

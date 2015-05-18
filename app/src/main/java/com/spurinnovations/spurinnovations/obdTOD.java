@@ -111,19 +111,24 @@ public enum obdTOD implements TODint
     ENGINE_PERCENT_TORQUE_DATA(100),
     AUX_IN_OUT_SUPPORTED(101);
 
-    private int extendedTOD;
+    private int obdToD;
 
     private static Map<Integer, obdTOD> map = new HashMap<Integer, obdTOD>();
 
     static {
         for (obdTOD legEnum : obdTOD.values()) {
-            map.put(legEnum.extendedTOD, legEnum);
+            map.put(legEnum.obdToD, legEnum);
         }
     }
 
-    private obdTOD(final int leg) { extendedTOD = leg; }
+    private obdTOD(final int leg) { obdToD = leg; }
 
-    public static obdTOD valueOf(int ExtendedTOD) {
-        return map.get(ExtendedTOD);
+    public static obdTOD valueOf(int obdTOD) {
+        return map.get(obdTOD);
+    }
+
+    public int showByteValue()
+    {
+        return obdToD;
     }
 }

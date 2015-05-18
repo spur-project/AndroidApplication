@@ -10,15 +10,6 @@ import java.util.Map;
  */
 public class ValidatePacket {
 
-    private static final byte REQUEST_PACKET = (byte) 0x00;
-    private static final byte BACKOFF_PACKET = (byte) 0x80;
-    private static final byte UPDATE_PACKET = (byte) 0xff;
-    private static final byte START_SEQUENCE = (byte) 0x02;
-    private static final byte END_SEQUENCE = (byte) 0x04;
-    private static final byte ESCAPE_SEQUENCE = (byte) 0x1B;
-    private static final int BYTEMASK = 0xff;
-
-
     private byte[] dataBuffer;
     private byte[] bytebuffer;
     private int packetlength;
@@ -30,33 +21,33 @@ public class ValidatePacket {
 
     public boolean validate(byte[] buffer, int length) {
         dataBuffer = new byte[length];
-        byte[] noContent = {END_SEQUENCE};
+        byte[] noContent = {ConstantDefinitions.END_SEQUENCE};
         int currentbyte_read = 0;
         int currentbyte_write = 0;
 
 
-        if (buffer[currentbyte_read] == START_SEQUENCE) {
+        if (buffer[currentbyte_read] == ConstantDefinitions.START_SEQUENCE) {
 
-            packetlength = buffer[++currentbyte_read] & BYTEMASK;
+            packetlength = buffer[++currentbyte_read] & ConstantDefinitions.BYTEMASK;
 
             if (packetlength != length) {
                 return false;
             }
 
             switch (buffer[++currentbyte_read]) {
-                case REQUEST_PACKET:
+                case ConstantDefinitions.REQUEST_PACKET:
 
                     break;
 
-                case BACKOFF_PACKET:
+                case ConstantDefinitions.BACKOFF_PACKET:
 
                     break;
 
-                case UPDATE_PACKET:
+                case ConstantDefinitions.UPDATE_PACKET:
 
                     while (true) {
 
-                        if (buffer[++currentbyte_read] == END_SEQUENCE && currentbyte_read == packetlength) {
+                        if (buffer[++currentbyte_read] == ConstantDefinitions.END_SEQUENCE && currentbyte_read == packetlength) {
 
                             if(packetlength > 4) {
                                 bytebuffer = Arrays.copyOf(dataBuffer, currentbyte_write - 1);
@@ -75,7 +66,7 @@ public class ValidatePacket {
                         }
                         else
                         {
-                            if(buffer[currentbyte_read] == ESCAPE_SEQUENCE)
+                            if(buffer[currentbyte_read] == ConstantDefinitions.ESCAPE_SEQUENCE)
                             {
                                 dataBuffer[currentbyte_write++] = (byte) (buffer[++currentbyte_read] - 1);
                             }
@@ -100,7 +91,7 @@ public class ValidatePacket {
 
     private boolean checkUnexpectedSequence(byte dataByte)
     {
-        if(dataByte == START_SEQUENCE || dataByte == END_SEQUENCE)
+        if(dataByte == ConstantDefinitions.START_SEQUENCE || dataByte == ConstantDefinitions.END_SEQUENCE)
         {
             return true;
         }
