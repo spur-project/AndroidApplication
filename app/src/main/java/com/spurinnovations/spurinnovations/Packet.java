@@ -1,5 +1,7 @@
 package com.spurinnovations.spurinnovations;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -54,8 +56,16 @@ public class Packet {
     {
         bytebuffer.put(ConstantDefinitions.END_SEQUENCE);
         packetReady = new byte[length + 1];
+        bytebuffer.clear();
         bytebuffer.get(packetReady, 0, length + 1);
         packetReady[1] = (byte) length;
+
+        StringBuffer sb = new StringBuffer();
+        for( byte b : packetReady )
+            sb.append(Integer.toHexString( b ));
+        Log.d(ConstantDefinitions.TAG, sb.toString());
+        Log.d(ConstantDefinitions.TAG, bytebuffer.toString());
+        Log.d(ConstantDefinitions.TAG, Integer.toString(length + 1));
 
         try {
             writeOut.write(packetReady);

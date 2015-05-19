@@ -4,12 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Manuel on 2015-05-16.
+ * A class that will hold a map for whether a TOD is signed or unsigned
+ * @author Manuel
  */
 public class signTOD {
 
     Map<TODint, Integer> signTOD = new HashMap<TODint, Integer>();
 
+    /**
+     * Constructor : will populate the map with the default values
+     */
     signTOD()
     {
 
@@ -140,6 +144,10 @@ public class signTOD {
 
     }
 
+    /**
+     *
+     * @return map with the values.
+     */
     Map<TODint, Integer> getsignTOD()
     {
         return signTOD;

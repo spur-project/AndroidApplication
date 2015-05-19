@@ -8,7 +8,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * Created by Manuel on 2015-05-15.
+ * This class will validate a received packet and will either pass it if valid or discard it if
+ * invalid.
+ * @author Manuel
  */
 public class ValidatePacket {
 
@@ -16,11 +18,22 @@ public class ValidatePacket {
     private byte[] bytebuffer;
     private int packetlength;
 
+    /**
+     * Constructor
+     */
     ValidatePacket()
     {
 
     }
 
+    /**
+     * Will validate the packet cheching that it counts with a start and ending sequence, a type of
+     * packet and that the length send matches the length received. It will then get rid of all the
+     * flags and will pass only the received data into a new packet for parsing
+     * @param buffer packet data
+     * @param length packet length
+     * @return true if valid, false if invalid
+     */
     public boolean validate(byte[] buffer, int length) {
         dataBuffer = new byte[length];
         byte[] noContent = {ConstantDefinitions.END_SEQUENCE};
@@ -96,6 +109,12 @@ public class ValidatePacket {
         return true;
     }
 
+    /**
+     * It will check that the packed does not contain any bytes resembling the sequences since
+     * an escape character should be used before sending them.
+     * @param dataByte byte of data
+     * @return true if any sequence found, false otherwise
+     */
     private boolean checkUnexpectedSequence(byte dataByte)
     {
         if(dataByte == ConstantDefinitions.START_SEQUENCE || dataByte == ConstantDefinitions.END_SEQUENCE)
@@ -108,6 +127,10 @@ public class ValidatePacket {
         }
     }
 
+    /**
+     *
+     * @return validated packet
+     */
     public byte[] getValidatedPacket()
     {
         return bytebuffer;

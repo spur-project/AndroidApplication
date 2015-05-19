@@ -88,7 +88,7 @@ public class ByteBufferSem {
         for( byte b : currentData )
             sb.append(Integer.toHexString( b ));
         Log.d(ConstantDefinitions.TAG, sb.toString());
-        Log.d(ConstantDefinitions.TAG, Integer.toString(elementsNumber));
+
         return currentData;
     }
 }

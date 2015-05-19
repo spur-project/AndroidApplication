@@ -12,7 +12,7 @@ public class ByteToD {
     Map<TODint, Integer> ByteToD = new HashMap<TODint, Integer>();
 
     /**
-     * Constructor : will populate the map with the hardcoded values
+     * Constructor : will populate the map with the default values
      */
     ByteToD()
     {

@@ -9,7 +9,10 @@ import android.view.View;
 
 import java.util.Map;
 
-
+/**
+ * This activity will show all the profile data for the user
+ * STILL IN PROGRESS, GUI IS SHOWING BUT NOT FUNCTIONAL
+ */
 public class ProfileView extends Activity {
 
     private Map<TODint, String> dataMap;

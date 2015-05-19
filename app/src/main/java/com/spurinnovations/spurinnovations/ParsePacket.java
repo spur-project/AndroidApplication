@@ -9,17 +9,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Manuel on 2015-05-15.
+ * A class to parse a valid packet just received.
+ * It will parse each TOD and place it into the maps.
+ * @author Manuel
  */
 public class ParsePacket {
 
+    //map for actual data TOD/ byte pair
     private Map<TODint, Values> dataMap;
+
+    //map for parsed data TOD/ string pair
     private Map<TODint, String> stringMap;
+
+    //map to hold the sign values for each TOD
     Map<TODint, Integer> signs;
+
+    //map to hold the notifications for each TOD
     Map<TODint, Integer> notification;
+
+    //map to hold the number of bytes for each TOD
     Map<TODint, Integer> values;
 
 
+    /**
+     * Constructor it will instantiate all the maps.
+     * @param stringMap map to store parsed data
+     */
     ParsePacket(Map<TODint, String> stringMap)
     {
         dataMap = new HashMap<TODint, Values>();
@@ -35,6 +50,11 @@ public class ParsePacket {
         notification = notifyList.getnotifyTOD();
     }
 
+    /**
+     * It will read the data from the packet and will store it on the right TOD for each
+     * map
+     * @param buffer valid packet
+     */
     public void parseData(byte[] buffer)
     {
         int bufferSize = buffer.length;
@@ -105,6 +125,13 @@ public class ParsePacket {
         }
     }
 
+    /**
+     * This function will parse the bytes received into a uint_8, uint_16, uint_32,
+     * int_16, int_32 and will store them as strings into the map.
+     * @param TOD type of data received
+     * @param data actual data
+     * @param datasize size of data
+     */
     private void putStringMap(TODint TOD, byte[] data, int datasize)
     {
         ByteBuffer bytebuffer = ByteBuffer.wrap(data);
@@ -168,12 +195,15 @@ public class ParsePacket {
         }
     }
 
+    /**
+     * This function looks for all updated values for the TODs specified on MainView
+     * It will return a list of all TODs that have a notification value of 1.
+     * @return list of all updated TODs
+     */
     public List<TODint> getMainViewUpdates()
     {
         TODint[] mainViewTOD = {NormalTOD.POSTED_SPEED_LIMIT,
                                 NormalTOD.VEHICLE_SPEED,
-                                NormalTOD.VEHICLE_SPEED,
-                                NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
                                 NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
                                 NormalTOD.VEHICLE_ACCELERATION,
                                 NormalTOD.VEHICLE_CORNERING_ACCELERATION};
@@ -194,6 +224,11 @@ public class ParsePacket {
         return updateList;
     }
 
+    /**
+     * This function looks for all updated values for the TODs specified on ProfileView
+     * It will return a list of all TODs that have a notification value of 1.
+     * @return list of all updated TODs
+     */
     public List<TODint> getProfileUpdates()
     {
         TODint[] profileViewTOD = { NormalTOD.ANDROID_DEVICE_PRIVILEGES,
@@ -228,6 +263,11 @@ public class ParsePacket {
         return updateList;
     }
 
+    /**
+     * This function looks for all updated values for the TODs specified on OBD
+     * It will return a list of all TODs that have a notification value of 1.
+     * @return list of all updated TODs
+     */
     public List<TODint> getOBDUpdates()
     {
         TODint[] obdViewTOD = { obdTOD.PIDS_SUPPORTED_1_20,

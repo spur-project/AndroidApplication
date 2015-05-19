@@ -15,6 +15,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+/**
+ * This activity will be called in case of a critical alert and will show
+ * an animation based on the type of alert.
+ */
 public class ImpactAlerts extends Activity {
 
     TextView alertview;

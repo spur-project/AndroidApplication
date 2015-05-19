@@ -29,7 +29,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-
+/**
+ * This activity is the Start activity for the application and will show the company
+ * logo followed by a list of devices and after selecting one it will connect to the
+ * selected one and will send the bluetooth MAC address on connection.
+ */
 public class MainPage extends Activity implements Runnable{
 
     protected ProgressBar spinner;
@@ -53,12 +57,13 @@ public class MainPage extends Activity implements Runnable{
         spinner = (ProgressBar)findViewById(R.id.spinnerbar);
         spinner.setVisibility(View.GONE);
 
+        //Setting singleton dataMap object
         Map<TODint, String> dataMap = new HashMap<TODint, String>();
         DataMap.setMap(dataMap);
-
         ParsePacket packet_parser = new ParsePacket(DataMap.getMap());
         DataMap.setParsingPacket(packet_parser);
 
+        //Setting Map for TOD/byte pairs.
         ByteToD valueM = new ByteToD();
         Map<TODint, Integer> valueMap = valueM.getByteToD();
         ValueMap.setMap(valueMap);
@@ -96,6 +101,12 @@ public class MainPage extends Activity implements Runnable{
 
     }
 
+    /**
+     * Callback based on the response from the devicelist activity.
+     * @param mRequestCode type of device request
+     * @param mResultCode result for the activity
+     * @param mDataIntent activity intent.
+     */
     public void onActivityResult(int mRequestCode, int mResultCode, Intent mDataIntent)
     {
         super.onActivityResult(mRequestCode, mResultCode, mDataIntent);
@@ -132,6 +143,9 @@ public class MainPage extends Activity implements Runnable{
         }
     }
 
+    /**
+     * List paired devices in the log
+     */
     private void ListPairedDevices()
     {
         Set<BluetoothDevice> mPairedDevices = mBluetoothAdapter.getBondedDevices();
@@ -144,6 +158,10 @@ public class MainPage extends Activity implements Runnable{
         }
     }
 
+    /**
+     * Code to execute after bluetooth device has been selected, it will connect to teh device and
+     * will send the bluetooth MAC address
+     */
     public void run()
     {
         try
@@ -176,6 +194,10 @@ public class MainPage extends Activity implements Runnable{
         }
     }
 
+    /**
+     * In case of an error or timeout the socket will be closed.
+     * @param nOpenSocket socket generated for connection
+     */
     private void closeSocket(BluetoothSocket nOpenSocket)
     {
         try

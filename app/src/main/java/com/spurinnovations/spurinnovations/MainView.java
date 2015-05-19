@@ -26,16 +26,20 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Most important activity on the application, it has the main thread that will get the data
+ * from the bluetooth socket and will parse it accordingly. It also sends a request packet on
+ * creation and will update the values constantly.
+ */
 public class MainView extends Activity implements Runnable{
 
     protected ByteBufferSem mainBuffer;
     private Map<TODint, String> dataMap;
     ParsePacket packetparser;
 
+    // TODs for MainView
     private TODint[] updateRequests = { NormalTOD.POSTED_SPEED_LIMIT,
                                         NormalTOD.VEHICLE_SPEED,
-                                        NormalTOD.VEHICLE_SPEED,
-                                        NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
                                         NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
                                         NormalTOD.VEHICLE_ACCELERATION,
                                         NormalTOD.VEHICLE_CORNERING_ACCELERATION};
@@ -60,6 +64,7 @@ public class MainView extends Activity implements Runnable{
 
         Log.d(ConstantDefinitions.TAG, "Starting Main View");
 
+        //get singleton
         dataMap = DataMap.getMap();
         packetparser = DataMap.getParsingPacket();
         current_limit = 0;
@@ -67,6 +72,7 @@ public class MainView extends Activity implements Runnable{
         //just for testing
         current_leeway = 20;
 
+        //get all the textviews
         alert_text = (TextView) findViewById(R.id.Alert);
         speed_limit = (TextView) findViewById(R.id.SpeedLimit);
         vehicle_speed = (TextView) findViewById(R.id.curSpeed);
@@ -79,7 +85,7 @@ public class MainView extends Activity implements Runnable{
 
         requestPacket requestUpdates = new requestPacket();
 
-        Log.d(ConstantDefinitions.TAG, "REQUEST GETTING READY");
+
 
         for(TODint TOD : updateRequests) {
             requestUpdates.addData((byte)TOD.showByteValue());
@@ -93,7 +99,7 @@ public class MainView extends Activity implements Runnable{
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
-        /*final BroadcastReceiver BTReceiver = new BroadcastReceiver() {
+        final BroadcastReceiver BTReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
@@ -109,7 +115,7 @@ public class MainView extends Activity implements Runnable{
                 }
             }
         };
-        this.registerReceiver(BTReceiver, filter);*/
+        this.registerReceiver(BTReceiver, filter);
 
         Thread getDataConnected = new Thread(this);
         getDataConnected.start();
@@ -145,14 +151,15 @@ public class MainView extends Activity implements Runnable{
         //startActivity(i);
     }
 
+    /**
+     * main thread will read the data from the socket and parse it.
+     */
     public void run()
     {
+        //get inputstream from the socket.
         InputStream istream = SocketHandler.getInSocket();
         mainBuffer = new ByteBufferSem(MAX_PACKET_SIZE);
         ValidatePacket packetValidator = new ValidatePacket();
-
-
-        char c;
 
         while(true)
         {
@@ -163,29 +170,33 @@ public class MainView extends Activity implements Runnable{
 
                 if((istream.available()) > 0)
                 {
+                    //read data
                     while ((rawdata_int = istream.read()) > -1)
                     {
                         rawdata = (byte) rawdata_int;
                         mainBuffer.write(rawdata);
 
+                        //if a packet is ready
                         if(mainBuffer.isReady())
                         {
                             Log.d(ConstantDefinitions.TAG, "Buffer is Ready");
 
+                            //validate data
                             if(packetValidator.validate(mainBuffer.getData(), mainBuffer.getElementsNumber()))
                             {
                                 Log.d(ConstantDefinitions.TAG, "Packet is Valid");
+                                //parse the packet
                                 packetparser.parseData(packetValidator.getValidatedPacket());
 
                                 Log.d(ConstantDefinitions.TAG, "Data has been parsed");
 
+                                //get List of updates to MainView
                                 List<TODint> mainUpdates =packetparser.getMainViewUpdates();
 
                                 if(mainUpdates.size() > 0) {
-                                    Log.d(ConstantDefinitions.TAG, "Data TO SHOW");
 
                                     for (TODint TOD : mainUpdates) {
-
+                                        // data to be shown in mainView
                                         Log.d(ConstantDefinitions.TAG, "Got Data to Show");
                                         Log.d(ConstantDefinitions.TAG, Integer.toString(TOD.showByteValue()));
 
@@ -193,7 +204,6 @@ public class MainView extends Activity implements Runnable{
                                     }
                                 }
 
-                                Log.d(ConstantDefinitions.TAG, "Data is Showing");
                             }
                         }
                     }
@@ -204,6 +214,11 @@ public class MainView extends Activity implements Runnable{
         }
     }
 
+    /**
+     * This function will show the data into the GUI if a notification(update) has been
+     * received.
+     * @param valueTOD tod to show
+     */
     public void showData(final TODint valueTOD)
     {
 //        Log.d(ConstantDefinitions.TAG, "Got Data to Show");
@@ -233,7 +248,7 @@ public class MainView extends Activity implements Runnable{
                             if (current_speed <= current_limit) {
 
                                 vehicle_speed.setBackgroundResource(R.drawable.green1);
-                                alert_text.setText("Everything is Good, just cruisin'");
+                                alert_text.setText("Everything is Good'");
 
                             } else if (current_speed <= current_limit + current_leeway / 2) {
 

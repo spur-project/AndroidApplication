@@ -10,7 +10,10 @@ import android.widget.LinearLayout;
 
 import java.util.Map;
 
-
+/**
+ * This activity will show all the settings available to an ADMIN
+ * STILL IN PROGRESS, GUI IS SHOWING BUT NOT FUNCTIONAL
+ */
 public class SettingsView extends Activity {
 
     private Map<TODint, String> dataMap;
@@ -72,7 +75,7 @@ public class SettingsView extends Activity {
         }
     }
 
-    public void showAcceration(View v)
+    public void showAcceleration(View v)
     {
         LinearLayout addacceleration = (LinearLayout) findViewById(R.id.AddAcceleration);
         if (addacceleration.getVisibility() == View.VISIBLE) {
@@ -82,7 +85,7 @@ public class SettingsView extends Activity {
         }
     }
 
-    public void showAccerationRate(View v)
+    public void showAccelerationRate(View v)
     {
         LinearLayout addaccelerationrate = (LinearLayout) findViewById(R.id.AddAccelerationRate);
         if (addaccelerationrate.getVisibility() == View.VISIBLE) {
