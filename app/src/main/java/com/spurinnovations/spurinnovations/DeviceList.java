@@ -17,12 +17,18 @@ import android.widget.TextView;
 
 import java.util.Set;
 
+/**
+ * Activity that will show the list of paired devices to the bluetooth adapter.
+ */
 public class DeviceList extends Activity
 {
     private BluetoothAdapter mBluetoothAdapter;
     private ArrayAdapter<String> mPairedDevicesArrayAdapter;
 
     @Override
+    /**
+     * show the list.
+     */
     protected void onCreate(Bundle mSavedInstanceState)
     {
         super.onCreate(mSavedInstanceState);
@@ -64,6 +70,9 @@ public class DeviceList extends Activity
         }
     }
 
+    /**
+     * Pass the selected device MAC address back to the Main Page to Connect.
+     */
     private OnItemClickListener mDeviceClickListener = new OnItemClickListener()
     {
         public void onItemClick(AdapterView<?> mAdapterView, View mView, int mPosition, long mLong)

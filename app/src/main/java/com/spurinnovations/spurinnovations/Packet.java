@@ -5,7 +5,8 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 /**
- * Created by Manuel on 2015-05-17.
+ * A class that will build a packet object according to the protocol
+ * @author Manuel
  */
 public class Packet {
 
@@ -14,19 +15,27 @@ public class Packet {
     int length;
     ByteBuffer bytebuffer;
 
+    /**
+     * Constructor, will create the packet with the starting sequence.
+     */
     Packet()
     {
-        packet = new byte[256];
-        bytebuffer.wrap(packet);
+        bytebuffer = ByteBuffer.allocate(256);
         bytebuffer.put(ConstantDefinitions.START_SEQUENCE);
         bytebuffer.put((byte) 0);
         length = 2;
 
     }
 
+    /**
+     * Will add the data into the packet
+     * @param data byte array of data
+     * @param size sie of data
+     * @return true if data was added, false if packet is full
+     */
     public boolean addData(byte[] data, int size)
     {
-        if(length + size > 256)
+        if(length + size > 255)
         {
             return false;
         }
@@ -37,10 +46,15 @@ public class Packet {
         return true;
     }
 
+    /**
+     * This function will wrap the packet and will send it trough the selected outputstream
+     * @param writeOut outputstream to send the data trough
+     */
     public void sendPacket(OutputStream writeOut)
     {
-        packetReady = new byte[length];
-        bytebuffer.get(packetReady, 0, length-1);
+        bytebuffer.put(ConstantDefinitions.END_SEQUENCE);
+        packetReady = new byte[length + 1];
+        bytebuffer.get(packetReady, 0, length + 1);
         packetReady[1] = (byte) length;
 
         try {

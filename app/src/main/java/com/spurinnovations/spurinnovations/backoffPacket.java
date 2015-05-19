@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Created by Manuel on 2015-05-17.
+ * A backoffPacket builder to send trough the network.
+ *
+ * @author Manuel
  */
 public class backoffPacket extends Packet {
 
 
-
+    /**
+     * Constructor will generate the packet for sendoff
+     */
     backoffPacket()
     {
         packet = new byte[ConstantDefinitions.BACKOFF_PACKET_SIZE];
@@ -20,6 +24,10 @@ public class backoffPacket extends Packet {
         packet[4] = ConstantDefinitions.END_SEQUENCE;
     }
 
+    /**
+     * It will send the packet to the selected output stream
+     * @param writeOut OutputStream from the BT socket
+     */
     @Override
     public void sendPacket(OutputStream writeOut) {
         try {

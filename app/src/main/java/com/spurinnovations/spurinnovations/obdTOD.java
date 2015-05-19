@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Manuel on 2015-05-11.
+ * Enum that holds the list of obd TODs (1 byte)
+ * @author Manuel
  */
 public enum obdTOD implements TODint
 {
@@ -115,18 +116,34 @@ public enum obdTOD implements TODint
 
     private static Map<Integer, obdTOD> map = new HashMap<Integer, obdTOD>();
 
+    /**
+     * adds every value to the map
+     */
     static {
-        for (obdTOD legEnum : obdTOD.values()) {
-            map.put(legEnum.obdToD, legEnum);
+        for (obdTOD TODEnum : obdTOD.values()) {
+            map.put(TODEnum.obdToD, TODEnum);
         }
     }
 
-    private obdTOD(final int leg) { obdToD = leg; }
+    /**
+     * add every value to the enum
+     * @param TOD enum value
+     */
+    private obdTOD(final int TOD) { obdToD = TOD; }
 
+    /**
+     * 
+     * @param obdTOD int value of the enum
+     * @return actual enum
+     */
     public static obdTOD valueOf(int obdTOD) {
         return map.get(obdTOD);
     }
 
+    /**
+     *
+     * @return integer value of the enum
+     */
     public int showByteValue()
     {
         return obdToD;

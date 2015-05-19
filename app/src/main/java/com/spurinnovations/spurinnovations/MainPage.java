@@ -48,6 +48,8 @@ public class MainPage extends Activity implements Runnable{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main_page);
 
+        Log.d(ConstantDefinitions.TAG, "Hello World");
+
         spinner = (ProgressBar)findViewById(R.id.spinnerbar);
         spinner.setVisibility(View.GONE);
 
@@ -155,12 +157,15 @@ public class MainPage extends Activity implements Runnable{
             // unique ID for phones --> In the case of tablets the best option would be to use a 64-bytes generator
             //TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
             // Simplest approach so far wi-fi has to be on at all times.
+
+            Log.d(ConstantDefinitions.TAG, "Before Sending MAC");
             String deviceId = ((BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE))
                     .getAdapter().getAddress();
             byte[] devID = deviceId.getBytes();
             writeOut.write(devID);
             writeOut.flush();
 
+            Log.d(ConstantDefinitions.TAG, "After Sending MAC");
             mHandler.sendEmptyMessage(0);
         }
         catch (IOException eConnectException)

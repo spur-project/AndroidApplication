@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Manuel on 2015-05-15.
+ * Enum that holds the list of extended TODs (2 bytes)
+ * @author Manuel 
  */
 public enum ExtendedTOD implements TODint{
 
@@ -14,15 +15,35 @@ public enum ExtendedTOD implements TODint{
 
     private static Map<Integer, ExtendedTOD> map = new HashMap<Integer, ExtendedTOD>();
 
+    /**
+     * adds every value to the map
+     */
     static {
-        for (ExtendedTOD legEnum : ExtendedTOD.values()) {
-            map.put(legEnum.extendedTOD, legEnum);
+        for (ExtendedTOD TODEnum : ExtendedTOD.values()) {
+            map.put(TODEnum.extendedTOD, TODEnum);
         }
     }
 
-    private ExtendedTOD(final int leg) { extendedTOD = leg; }
+    /**
+     * constructor
+     * @param TOD adds values to the enum
+     */
+    private ExtendedTOD(final int TOD) { extendedTOD = TOD; }
 
+    /**
+     * 
+     * @param ExtendedTOD int value of the enum
+     * @return the actual enum
+     */
     public static ExtendedTOD valueOf(int ExtendedTOD) {
         return map.get(ExtendedTOD);
+    }
+
+    @Override
+    /**
+     * It will return the int value for the enum
+     */
+    public int showByteValue() {
+        return extendedTOD;
     }
 }

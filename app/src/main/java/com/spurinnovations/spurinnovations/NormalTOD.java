@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Manuel on 2015-05-11.
+ * Enum that holds the list of Normal TODs (1 byte)
+ * @author Manuel
  */
 public enum NormalTOD implements TODint
 {
@@ -36,18 +37,34 @@ public enum NormalTOD implements TODint
 
     private static Map<Integer, NormalTOD> map = new HashMap<Integer, NormalTOD>();
 
+    /**
+     * adds every value to the map
+     */
     static {
-        for (NormalTOD legEnum : NormalTOD.values()) {
-            map.put(legEnum.normalTOD, legEnum);
+        for (NormalTOD TODEnum : NormalTOD.values()) {
+            map.put(TODEnum.normalTOD, TODEnum);
         }
     }
 
-    private NormalTOD(final int leg) { normalTOD = leg; }
+    /**
+     * add every value to the enum
+     * @param TOD enum value
+     */
+    private NormalTOD(final int TOD) { normalTOD = TOD; }
 
+    /**
+     * 
+     * @param NormalTOD integer value fo the enum
+     * @return actual enum
+     */
     public static NormalTOD valueOf(int NormalTOD) {
         return map.get(NormalTOD);
     }
 
+    /**
+     * 
+     * @return integer value of the enum
+     */
     public int showByteValue()
     {
         return normalTOD;

@@ -38,12 +38,20 @@ public class ParsePacket {
     public void parseData(byte[] buffer)
     {
         int bufferSize = buffer.length;
+
+        StringBuffer sb = new StringBuffer();
+        for( byte b : buffer )
+            sb.append(Integer.toHexString( b ));
+        Log.d(ConstantDefinitions.TAG, sb.toString());
+        Log.d(ConstantDefinitions.TAG, Integer.toString(bufferSize));
+
+
         int cursor = 0;
         int datasize = 0;
         int ToD = 0;
         byte[] data = new byte[256];
 
-        while(cursor < bufferSize) {
+        while(cursor < bufferSize - 1) {
 
             if (buffer[cursor] <= ConstantDefinitions.EXTENDED_TOD)
             {
@@ -172,6 +180,7 @@ public class ParsePacket {
 
         List<TODint> updateList = new ArrayList<TODint>();
 
+
         for(TODint TOD : mainViewTOD)
         {
             if(notification.get(TOD) == 1)
@@ -181,6 +190,7 @@ public class ParsePacket {
             }
         }
 
+        Log.d(ConstantDefinitions.TAG, updateList.toString());
         return updateList;
     }
 

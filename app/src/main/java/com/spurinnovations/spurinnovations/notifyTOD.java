@@ -4,12 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Manuel on 2015-05-16.
+ * A class that will hold a map that will be updated if a piece of data has been received
+ * for the specified TOD.
+ * @author Manuel
  */
 public class notifyTOD {
 
     Map<TODint, Integer> notifyTOD = new HashMap<TODint, Integer>();
 
+    /**
+     * Constructor : will populate the map with all 0 since no data has been
+     * received for any TOD.
+     */
     notifyTOD()
     {
 
@@ -140,6 +146,10 @@ public class notifyTOD {
 
     }
 
+    /**
+     *
+     * @return map with the values.
+     */
     Map<TODint, Integer> getnotifyTOD()
     {
         return notifyTOD;

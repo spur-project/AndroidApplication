@@ -4,12 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Manuel on 2015-05-12.
+ * A class that will hold a map for the number of bytes each TOD needs.
+ * @author Manuel
  */
 public class ByteToD {
 
     Map<TODint, Integer> ByteToD = new HashMap<TODint, Integer>();
 
+    /**
+     * Constructor : will populate the map with the hardcoded values
+     */
     ByteToD()
     {
 
@@ -140,6 +144,10 @@ public class ByteToD {
 
     }
 
+    /**
+     *
+     * @return map with the values.
+     */
     Map<TODint, Integer> getByteToD()
     {
         return ByteToD;

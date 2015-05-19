@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Map;
 
 public class MainView extends Activity implements Runnable{
@@ -56,6 +57,9 @@ public class MainView extends Activity implements Runnable{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
+
+        Log.d(ConstantDefinitions.TAG, "Starting Main View");
+
         dataMap = DataMap.getMap();
         packetparser = DataMap.getParsingPacket();
         current_limit = 0;
@@ -71,16 +75,25 @@ public class MainView extends Activity implements Runnable{
         forward_acc = (TextView) findViewById(R.id.Acceleration);
         cornering_acc = (TextView) findViewById(R.id.Cornering);
 
+        Log.d(ConstantDefinitions.TAG, "Before Sending Request Packet");
+
         requestPacket requestUpdates = new requestPacket();
+
+        Log.d(ConstantDefinitions.TAG, "REQUEST GETTING READY");
+
         for(TODint TOD : updateRequests) {
             requestUpdates.addData((byte)TOD.showByteValue());
         }
+
+        Log.d(ConstantDefinitions.TAG, "REQUEST READY");
+
         requestUpdates.sendPacket(SocketHandler.getOStream());
 
+        Log.d(ConstantDefinitions.TAG, "After Sending Request Packet");
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
-        final BroadcastReceiver BTReceiver = new BroadcastReceiver() {
+        /*final BroadcastReceiver BTReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
@@ -96,7 +109,7 @@ public class MainView extends Activity implements Runnable{
                 }
             }
         };
-        this.registerReceiver(BTReceiver, filter);
+        this.registerReceiver(BTReceiver, filter);*/
 
         Thread getDataConnected = new Thread(this);
         getDataConnected.start();
@@ -157,15 +170,30 @@ public class MainView extends Activity implements Runnable{
 
                         if(mainBuffer.isReady())
                         {
+                            Log.d(ConstantDefinitions.TAG, "Buffer is Ready");
+
                             if(packetValidator.validate(mainBuffer.getData(), mainBuffer.getElementsNumber()))
                             {
+                                Log.d(ConstantDefinitions.TAG, "Packet is Valid");
                                 packetparser.parseData(packetValidator.getValidatedPacket());
 
-                                if(packetparser.getMainViewUpdates().size() > 0) {
-                                    for (TODint TOD : packetparser.getMainViewUpdates()) {
+                                Log.d(ConstantDefinitions.TAG, "Data has been parsed");
+
+                                List<TODint> mainUpdates =packetparser.getMainViewUpdates();
+
+                                if(mainUpdates.size() > 0) {
+                                    Log.d(ConstantDefinitions.TAG, "Data TO SHOW");
+
+                                    for (TODint TOD : mainUpdates) {
+
+                                        Log.d(ConstantDefinitions.TAG, "Got Data to Show");
+                                        Log.d(ConstantDefinitions.TAG, Integer.toString(TOD.showByteValue()));
+
                                         showData(TOD);
                                     }
                                 }
+
+                                Log.d(ConstantDefinitions.TAG, "Data is Showing");
                             }
                         }
                     }
@@ -178,9 +206,13 @@ public class MainView extends Activity implements Runnable{
 
     public void showData(final TODint valueTOD)
     {
+//        Log.d(ConstantDefinitions.TAG, "Got Data to Show");
+//        Log.d(ConstantDefinitions.TAG, Integer.toString(valueTOD.showByteValue()));
+
         runOnUiThread(new Runnable() {
             public void run()
             {
+
 
                 if(dataMap.get(valueTOD) != null) {
 
@@ -201,6 +233,7 @@ public class MainView extends Activity implements Runnable{
                             if (current_speed <= current_limit) {
 
                                 vehicle_speed.setBackgroundResource(R.drawable.green1);
+                                alert_text.setText("Everything is Good, just cruisin'");
 
                             } else if (current_speed <= current_limit + current_leeway / 2) {
 
@@ -248,7 +281,19 @@ public class MainView extends Activity implements Runnable{
                             else
                             {
                                 Intent goAlert = new Intent(MainView.this, ImpactAlerts.class);
-                                goAlert.putExtra("alert", ConstantDefinitions.STOP_SPEEDING);
+                                alert_text.setText("SLOW DOWN NOW");
+                                vehicle_speed.setBackgroundResource(R.drawable.redani);
+
+                                vehicle_speed.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AnimationDrawable frameAnimation =
+                                                (AnimationDrawable) vehicle_speed.getBackground();
+                                        frameAnimation.start();
+                                    }
+                                });
+
+                                goAlert.putExtra("alert", ConstantDefinitions.STOP_PEDESTRIAN);
                                 startActivity(goAlert);
                             }
                         }
@@ -270,6 +315,8 @@ public class MainView extends Activity implements Runnable{
                         cornering_acc.setText(dataMap.get(NormalTOD.VEHICLE_CORNERING_ACCELERATION));
                     }
                 }
+
+                Log.d(ConstantDefinitions.TAG, "Showed Data");
 
             }
         });

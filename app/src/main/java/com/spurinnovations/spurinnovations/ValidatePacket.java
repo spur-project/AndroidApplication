@@ -1,5 +1,7 @@
 package com.spurinnovations.spurinnovations;
 
+import android.util.Log;
+
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -30,6 +32,9 @@ public class ValidatePacket {
 
             packetlength = buffer[++currentbyte_read] & ConstantDefinitions.BYTEMASK;
 
+            Log.d(ConstantDefinitions.TAG, Integer.toString(packetlength));
+            Log.d(ConstantDefinitions.TAG, Integer.toString(length));
+
             if (packetlength != length) {
                 return false;
             }
@@ -47,10 +52,10 @@ public class ValidatePacket {
 
                     while (true) {
 
-                        if (buffer[++currentbyte_read] == ConstantDefinitions.END_SEQUENCE && currentbyte_read == packetlength) {
+                        if (buffer[++currentbyte_read] == ConstantDefinitions.END_SEQUENCE && currentbyte_read + 1 == packetlength) {
 
                             if(packetlength > 4) {
-                                bytebuffer = Arrays.copyOf(dataBuffer, currentbyte_write - 1);
+                                bytebuffer = Arrays.copyOf(dataBuffer, currentbyte_write);
                             }
                             else
                             {
@@ -62,6 +67,8 @@ public class ValidatePacket {
 
                         if(checkUnexpectedSequence(buffer[currentbyte_read]))
                         {
+                            Log.d(ConstantDefinitions.TAG, "FALSE");
+                            Log.d(ConstantDefinitions.TAG, Integer.toString(currentbyte_read));
                             return false;
                         }
                         else

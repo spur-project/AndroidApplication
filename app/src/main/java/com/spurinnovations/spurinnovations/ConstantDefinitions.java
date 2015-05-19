@@ -1,7 +1,8 @@
 package com.spurinnovations.spurinnovations;
 
 /**
- * Created by Manuel on 2015-05-17.
+ * Class holding all the constants for the application
+ * @author Manuel
  */
 public class ConstantDefinitions {
 
