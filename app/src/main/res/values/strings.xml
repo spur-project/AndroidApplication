@@ -4,11 +4,11 @@
     <string name="app_name">SpurInnovations</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main_view">MainView</string>
+    <string name="title_activity_main_view"></string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_profile_view">ProfileView</string>
-    <string name="title_activity_settings_view">SettingsView</string>
-    <string name="title_activity_impact_alerts">ImpactAlerts</string>
+    <string name="title_activity_profile_view"></string>
+    <string name="title_activity_settings_view"></string>
+    <string name="title_activity_impact_alerts"></string>
     <string name="title_activity_s">S</string>
     <string name="title_activity_profile">profile</string>
 

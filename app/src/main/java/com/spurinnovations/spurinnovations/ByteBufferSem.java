@@ -39,6 +39,20 @@ public class ByteBufferSem {
      */
     public void write(byte data)
     {
+        if(position == 0)
+        {
+            if(data == ConstantDefinitions.START_SEQUENCE)
+            {
+                mainBuffer[position] = data;
+                position++;
+                elementsNumber++;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         if(elementsNumber < buffersize)
         {
             if (data == ConstantDefinitions.END_SEQUENCE) {

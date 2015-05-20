@@ -85,8 +85,6 @@ public class MainView extends Activity implements Runnable{
 
         requestPacket requestUpdates = new requestPacket();
 
-
-
         for(TODint TOD : updateRequests) {
             requestUpdates.addData((byte)TOD.showByteValue());
         }
@@ -308,7 +306,7 @@ public class MainView extends Activity implements Runnable{
                                     }
                                 });
 
-                                goAlert.putExtra("alert", ConstantDefinitions.STOP_PEDESTRIAN);
+                                goAlert.putExtra("alert", ConstantDefinitions.STOP_SPEEDING);
                                 startActivity(goAlert);
                             }
                         }
@@ -341,6 +339,7 @@ public class MainView extends Activity implements Runnable{
     {
         Intent i = new Intent(this, ProfileView.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
 
@@ -348,6 +347,7 @@ public class MainView extends Activity implements Runnable{
     {
         Intent i = new Intent(this, SettingsView.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
 

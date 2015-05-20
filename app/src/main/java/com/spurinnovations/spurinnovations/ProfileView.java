@@ -46,6 +46,7 @@ public class ProfileView extends Activity {
     {
         Intent i = new Intent(this, MainView.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
 
@@ -60,6 +61,7 @@ public class ProfileView extends Activity {
     {
         Intent i = new Intent(this, SettingsView.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
 }

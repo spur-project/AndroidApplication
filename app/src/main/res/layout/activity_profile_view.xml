@@ -32,7 +32,7 @@
 
     <Button
         android:text="Status"
-        android:width="100dp"
+        android:width="160dp"
         android:background="@drawable/roundbutton"
         android:id="@+id/status"
         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
         android:layout_alignParentLeft="true"
         android:onClick="goStatus"/>
 
-    <Button
+    <!--<Button
         android:text="Profile"
         android:width="100dp"
         android:background="@drawable/roundbutton"
@@ -50,11 +50,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="goProfile"/>
+        android:onClick="goProfile"/>-->
 
     <Button
         android:text="Settings"
-        android:width="100dp"
+        android:width="160dp"
         android:background="@drawable/roundbutton"
         android:id="@+id/settings"
         android:layout_width="wrap_content"

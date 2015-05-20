@@ -21,6 +21,9 @@ public class notifyTOD {
 
         notifyTOD.put(NormalTOD.ANDROID_DEVICE_PRIVILEGES, 0);
         notifyTOD.put(NormalTOD.DEVICE_CONFIGURATION, 0);
+        notifyTOD.put(NormalTOD.CUSTOM_SPEED_LEEWAY_BREAKPOINTS, 0);
+        notifyTOD.put(NormalTOD.CUSTOM_SPEED_LEEWAY_VALUES, 0);
+        notifyTOD.put(NormalTOD.CURRENT_LEEWAY, 0);
         notifyTOD.put(NormalTOD.CONTROL_STATUS, 0);
         notifyTOD.put(NormalTOD.CAMERA_STATUS, 0);
         notifyTOD.put(NormalTOD.VEHICLE_STATUS, 0);

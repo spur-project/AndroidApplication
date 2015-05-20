@@ -88,7 +88,13 @@ public class ValidatePacket {
                         {
                             if(buffer[currentbyte_read] == ConstantDefinitions.ESCAPE_SEQUENCE)
                             {
-                                dataBuffer[currentbyte_write++] = (byte) (buffer[++currentbyte_read] - 1);
+                                if(currentbyte_read + 1 < length) {
+                                    dataBuffer[currentbyte_write++] = (byte) (buffer[++currentbyte_read] - 1);
+                                }
+                                else
+                                {
+                                    return false;
+                                }
                             }
                             else
                             {

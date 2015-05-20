@@ -19,6 +19,9 @@ public class signTOD {
 
         signTOD.put(NormalTOD.ANDROID_DEVICE_PRIVILEGES, 0);
         signTOD.put(NormalTOD.DEVICE_CONFIGURATION, 0);
+        signTOD.put(NormalTOD.CUSTOM_SPEED_LEEWAY_BREAKPOINTS, 0);
+        signTOD.put(NormalTOD.CUSTOM_SPEED_LEEWAY_VALUES, 0);
+        signTOD.put(NormalTOD.CURRENT_LEEWAY, 0);
         signTOD.put(NormalTOD.CONTROL_STATUS, 0);
         signTOD.put(NormalTOD.CAMERA_STATUS, 0);
         signTOD.put(NormalTOD.VEHICLE_STATUS, 0);

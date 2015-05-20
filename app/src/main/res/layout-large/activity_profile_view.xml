@@ -24,7 +24,7 @@
 
      <Button
          android:text="Status"
-         android:width="150dp"
+         android:width="270dp"
          android:textSize="30sp"
          android:background="@drawable/roundbutton"
          android:id="@+id/status"
@@ -35,20 +35,8 @@
          android:onClick="goStatus"/>
 
      <Button
-         android:text="Profile"
-         android:width="150dp"
-         android:textSize="30sp"
-         android:background="@drawable/roundbutton"
-         android:id="@+id/profile"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentBottom="true"
-         android:layout_centerHorizontal="true"
-         android:onClick="goProfile"/>
-
-     <Button
          android:text="Settings"
-         android:width="150dp"
+         android:width="270dp"
          android:textSize="30sp"
          android:background="@drawable/roundbutton"
          android:id="@+id/settings"

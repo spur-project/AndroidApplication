@@ -18,11 +18,22 @@ public class SettingsView extends Activity {
 
     private Map<TODint, String> dataMap;
 
+    private static final int ALL_CLICKABLE = 0;
+    private static final int LEEWAY_CLICKABLE = 1;
+    private static final int ADDUSER_CLICKABLE = 2;
+    private static final int ACCELERATION_CLICKABLE = 3;
+    private static final int ACCRATE_CLICKABLE = 4;
+    private static final int SPEED_CLICKABLE = 5;
+
+    private int click_enable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_view);
         dataMap = DataMap.getMap();
+
+        click_enable = ALL_CLICKABLE;
     }
 
     @Override
@@ -48,6 +59,7 @@ public class SettingsView extends Activity {
     {
         Intent i = new Intent(this, MainView.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
 
@@ -55,6 +67,7 @@ public class SettingsView extends Activity {
     {
         Intent i = new Intent(this, ProfileView.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
 
@@ -65,43 +78,75 @@ public class SettingsView extends Activity {
         //startActivity(i);
     }
 
+    public void showLeeway(View v)
+    {
+        if(click_enable == ALL_CLICKABLE || click_enable == LEEWAY_CLICKABLE) {
+            LinearLayout leeway = (LinearLayout) findViewById(R.id.leewayLayout);
+            if (leeway.getVisibility() == View.VISIBLE) {
+                leeway.setVisibility(View.GONE);
+                click_enable = ALL_CLICKABLE;
+            } else {
+                leeway.setVisibility(View.VISIBLE);
+                click_enable = LEEWAY_CLICKABLE;
+            }
+        }
+    }
+
     public void showAddUser(View v)
     {
-        LinearLayout adduser = (LinearLayout) findViewById(R.id.AddUser);
-        if (adduser.getVisibility() == View.VISIBLE) {
-            adduser.setVisibility(View.GONE);
-        } else {
-            adduser.setVisibility(View.VISIBLE);
+        if(click_enable == ALL_CLICKABLE || click_enable == ADDUSER_CLICKABLE) {
+            LinearLayout adduser = (LinearLayout) findViewById(R.id.AddUser);
+            if (adduser.getVisibility() == View.VISIBLE) {
+                adduser.setVisibility(View.GONE);
+                click_enable = ALL_CLICKABLE;
+            } else {
+                adduser.setVisibility(View.VISIBLE);
+                click_enable = ADDUSER_CLICKABLE;
+            }
         }
     }
 
     public void showAcceleration(View v)
     {
-        LinearLayout addacceleration = (LinearLayout) findViewById(R.id.AddAcceleration);
-        if (addacceleration.getVisibility() == View.VISIBLE) {
-            addacceleration.setVisibility(View.GONE);
-        } else {
-            addacceleration.setVisibility(View.VISIBLE);
+        if(click_enable == ALL_CLICKABLE || click_enable == ACCELERATION_CLICKABLE) {
+            LinearLayout addacceleration = (LinearLayout) findViewById(R.id.AddAcceleration);
+            if (addacceleration.getVisibility() == View.VISIBLE) {
+                addacceleration.setVisibility(View.GONE);
+                click_enable = ALL_CLICKABLE;
+            } else {
+                addacceleration.setVisibility(View.VISIBLE);
+                click_enable = ACCELERATION_CLICKABLE;
+
+            }
         }
     }
 
     public void showAccelerationRate(View v)
     {
-        LinearLayout addaccelerationrate = (LinearLayout) findViewById(R.id.AddAccelerationRate);
-        if (addaccelerationrate.getVisibility() == View.VISIBLE) {
-            addaccelerationrate.setVisibility(View.GONE);
-        } else {
-            addaccelerationrate.setVisibility(View.VISIBLE);
+        if(click_enable == ALL_CLICKABLE || click_enable == ACCRATE_CLICKABLE) {
+            LinearLayout addaccelerationrate = (LinearLayout) findViewById(R.id.AddAccelerationRate);
+            if (addaccelerationrate.getVisibility() == View.VISIBLE) {
+                addaccelerationrate.setVisibility(View.GONE);
+                click_enable = ALL_CLICKABLE;
+            } else {
+                addaccelerationrate.setVisibility(View.VISIBLE);
+                click_enable = ACCRATE_CLICKABLE;
+            }
         }
     }
 
     public void showSpeed(View v)
     {
-        LinearLayout addspeed = (LinearLayout) findViewById(R.id.AddSpeed);
-        if (addspeed.getVisibility() == View.VISIBLE) {
-            addspeed.setVisibility(View.GONE);
-        } else {
-            addspeed.setVisibility(View.VISIBLE);
+        if(click_enable == ALL_CLICKABLE || click_enable == SPEED_CLICKABLE) {
+            LinearLayout addspeed = (LinearLayout) findViewById(R.id.AddSpeed);
+            if (addspeed.getVisibility() == View.VISIBLE) {
+                addspeed.setVisibility(View.GONE);
+                click_enable = ALL_CLICKABLE;
+            } else {
+                addspeed.setVisibility(View.VISIBLE);
+                click_enable = SPEED_CLICKABLE;
+
+            }
         }
     }
 }
