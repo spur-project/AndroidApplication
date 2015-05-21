@@ -19,6 +19,7 @@ public class ByteToD {
 
         ByteToD.put(NormalTOD.ANDROID_DEVICE_PRIVILEGES, 2);
         ByteToD.put(NormalTOD.DEVICE_CONFIGURATION, 2);
+        ByteToD.put(NormalTOD.SPEED_LEEWAY_PROFILE, 1);
         ByteToD.put(NormalTOD.CUSTOM_SPEED_LEEWAY_BREAKPOINTS, 11);
         ByteToD.put(NormalTOD.CUSTOM_SPEED_LEEWAY_VALUES, 11);
         ByteToD.put(NormalTOD.CURRENT_LEEWAY, 1);

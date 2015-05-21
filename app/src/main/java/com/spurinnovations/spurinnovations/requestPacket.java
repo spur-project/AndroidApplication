@@ -17,6 +17,18 @@ public class requestPacket extends Packet
         length = 3;
     }
 
+    public void setTypeofRequest(byte data)
+    {
+        bytebuffer.put(data);
+        length++;
+    }
+
+    public void setTimeInterval(byte data)
+    {
+        bytebuffer.put(data);
+        length++;
+    }
+
     /**
      * adds the data to the packet
      * @param data TOD to request

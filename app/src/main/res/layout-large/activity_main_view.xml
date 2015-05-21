@@ -11,15 +11,16 @@
 
     <TextView
         android:id="@+id/Alert"
-        android:layout_width="200dp"
+        android:layout_width="fill_parent"
         android:layout_height="100dp"
         android:text="Alerts"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:textColor="#ffffff"
         android:textSize="50sp"
         android:layout_marginBottom="50dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_alignStart="@+id/Brakingtext"
+        android:layout_alignEnd="@+id/Corneringtext" />
 
 
     <TextView
@@ -46,8 +47,8 @@
 
     <TextView
         android:id="@+id/curSpeed"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_below="@id/Alert"
         android:layout_alignParentRight="true"
         android:background="#ffffff"

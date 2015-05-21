@@ -66,17 +66,30 @@ public class ParsePacket {
         Log.d(ConstantDefinitions.TAG, Integer.toString(bufferSize));
 
 
-        int cursor = 0;
+        int cursor = -1;
         int datasize = 0;
         int ToD = 0;
         byte[] data = new byte[256];
 
         while(cursor < bufferSize - 1) {
 
-            if (buffer[cursor] <= ConstantDefinitions.EXTENDED_TOD)
+            if (buffer[++cursor] <= ConstantDefinitions.EXTENDED_TOD)
             {
+                int debugger = buffer[cursor] &  ConstantDefinitions.BYTEMASK;
+                Log.d(  ConstantDefinitions.TAG, "FOLLOWING TYPE RECEIVED");
+                Log.d( ConstantDefinitions.TAG, Integer.toString(debugger) );
 
-                datasize = values.get(NormalTOD.valueOf(buffer[cursor] & ConstantDefinitions.BYTEMASK));
+                try {
+                    datasize = values.get(NormalTOD.valueOf(buffer[cursor] & ConstantDefinitions.BYTEMASK));
+                }catch(NullPointerException e)
+                {
+                    Log.d(ConstantDefinitions.TAG, "Unknown type");
+
+                }
+
+                Log.d(ConstantDefinitions.TAG, Integer.toString(datasize));
+
+
                 ToD = buffer[cursor] & ConstantDefinitions.BYTEMASK;
 
                 for(int i = 0; i < datasize; i++)
@@ -139,59 +152,61 @@ public class ParsePacket {
         short value_short = 0;
         long value_long = 0;
 
+        try {
+            if (signs.get(TOD) == 0) {
+                switch (datasize) {
+                    case 1:
 
-        if(signs.get(TOD) == 0) {
-            switch (datasize) {
-                case 1:
+                        value = bytebuffer.get(0) & ConstantDefinitions.BYTEMASK;
+                        stringMap.put(TOD, Integer.toString(value));
 
-                    value = bytebuffer.get(0) & ConstantDefinitions.BYTEMASK;
-                    stringMap.put(TOD, Integer.toString(value));
+                        break;
+                    case 2:
 
-                    break;
-                case 2:
+                        value = bytebuffer.getShort(0) & ConstantDefinitions.BYTEMASK;
+                        stringMap.put(TOD, Integer.toString(value));
+                        break;
 
-                    value = bytebuffer.getShort(0) & ConstantDefinitions.BYTEMASK;
-                    stringMap.put(TOD, Integer.toString(value));
-                    break;
+                    case 4:
 
-                case 4:
+                        value_long = bytebuffer.getInt(0) & 0xfffffffL;
+                        stringMap.put(TOD, Long.toString(value_long));
 
-                    value_long = bytebuffer.getInt(0) & 0xfffffffL;
-                    stringMap.put(TOD, Long.toString(value_long));
+                        break;
 
-                    break;
+                    default:
 
-                default:
-
-                    break;
-            }
-        }
-        else if (signs.get(TOD) == 1)
-        {
-            switch (datasize) {
+                        break;
+                }
+            } else if (signs.get(TOD) == 1) {
+                switch (datasize) {
                 /*case 1:
 
                     value = bytebuffer.get(0) & ConstantDefinitions.BYTEMASK;
                     stringMap.put(TOD, Integer.toString(value));
 
                     break;*/
-                case 2:
+                    case 2:
 
-                    value_short = bytebuffer.getShort(0);
-                    stringMap.put(TOD, Short.toString(value_short));
-                    break;
+                        value_short = bytebuffer.getShort(0);
+                        stringMap.put(TOD, Short.toString(value_short));
+                        break;
 
-                case 4:
+                    case 4:
 
-                    value = bytebuffer.getInt(0);
-                    stringMap.put(TOD, Integer.toString(value));
+                        value = bytebuffer.getInt(0);
+                        stringMap.put(TOD, Integer.toString(value));
 
-                    break;
+                        break;
 
-                default:
+                    default:
 
-                    break;
+                        break;
+                }
             }
+        }
+        catch(NullPointerException e)
+        {
         }
     }
 
@@ -206,7 +221,8 @@ public class ParsePacket {
                                 NormalTOD.VEHICLE_SPEED,
                                 NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
                                 NormalTOD.VEHICLE_ACCELERATION,
-                                NormalTOD.VEHICLE_CORNERING_ACCELERATION};
+                                NormalTOD.VEHICLE_CORNERING_ACCELERATION,
+                                NormalTOD.CURRENT_LEEWAY};
 
         List<TODint> updateList = new ArrayList<TODint>();
 
@@ -384,7 +400,34 @@ public class ParsePacket {
             }
         }
 
+
+
         return updateList;
+    }
+
+    public List<TODint> getSettingsUpdates()
+    {
+        TODint[] profileViewTOD = { NormalTOD.SPEED_LEEWAY_PROFILE,
+                                    NormalTOD.CUSTOM_SPEED_LEEWAY_BREAKPOINTS,
+                                    NormalTOD.CUSTOM_SPEED_LEEWAY_VALUES};
+
+        List<TODint> updateList = new ArrayList<TODint>();
+
+        for(TODint TOD : profileViewTOD)
+        {
+            if(notification.get(TOD) == 1)
+            {
+                updateList.add(TOD);
+                notification.put(TOD, 0);
+            }
+        }
+
+        return updateList;
+    }
+
+    public Map<TODint, Values> getDataMap()
+    {
+        return dataMap;
     }
 
 

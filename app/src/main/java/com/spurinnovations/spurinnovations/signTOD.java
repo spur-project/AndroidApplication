@@ -16,9 +16,9 @@ public class signTOD {
      */
     signTOD()
     {
-
         signTOD.put(NormalTOD.ANDROID_DEVICE_PRIVILEGES, 0);
         signTOD.put(NormalTOD.DEVICE_CONFIGURATION, 0);
+        signTOD.put(NormalTOD.SPEED_LEEWAY_PROFILE, 0);
         signTOD.put(NormalTOD.CUSTOM_SPEED_LEEWAY_BREAKPOINTS, 0);
         signTOD.put(NormalTOD.CUSTOM_SPEED_LEEWAY_VALUES, 0);
         signTOD.put(NormalTOD.CURRENT_LEEWAY, 0);

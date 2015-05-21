@@ -46,6 +46,7 @@ public class ByteBufferSem {
                 mainBuffer[position] = data;
                 position++;
                 elementsNumber++;
+                return;
             }
             else
             {

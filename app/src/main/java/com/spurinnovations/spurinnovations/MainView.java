@@ -38,11 +38,12 @@ public class MainView extends Activity implements Runnable{
     ParsePacket packetparser;
 
     // TODs for MainView
-    private TODint[] updateRequests = { NormalTOD.POSTED_SPEED_LIMIT,
-                                        NormalTOD.VEHICLE_SPEED,
-                                        NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
+    private TODint[] updateRequests = { NormalTOD.VEHICLE_SPEED,
                                         NormalTOD.VEHICLE_ACCELERATION,
-                                        NormalTOD.VEHICLE_CORNERING_ACCELERATION};
+                                        NormalTOD.VEHICLE_CORNERING_ACCELERATION,
+                                        NormalTOD.POSTED_SPEED_LIMIT,
+                                        NormalTOD.ELAPSED_TIME_SPEED_LIMIT,
+                                        NormalTOD.CURRENT_LEEWAY};
 
     private TextView speed_limit;
     private TextView vehicle_speed;
@@ -56,6 +57,7 @@ public class MainView extends Activity implements Runnable{
     private int current_leeway;
 
     private static final int MAX_PACKET_SIZE = 256;
+    private static final byte INTERVAL_TIME = (byte) 0xc8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class MainView extends Activity implements Runnable{
         //get singleton
         dataMap = DataMap.getMap();
         packetparser = DataMap.getParsingPacket();
-        current_limit = 0;
+        current_limit = -1;
 
         //just for testing
         current_leeway = 20;
@@ -80,20 +82,6 @@ public class MainView extends Activity implements Runnable{
         braking_acc = (TextView) findViewById(R.id.Braking);
         forward_acc = (TextView) findViewById(R.id.Acceleration);
         cornering_acc = (TextView) findViewById(R.id.Cornering);
-
-        Log.d(ConstantDefinitions.TAG, "Before Sending Request Packet");
-
-        requestPacket requestUpdates = new requestPacket();
-
-        for(TODint TOD : updateRequests) {
-            requestUpdates.addData((byte)TOD.showByteValue());
-        }
-
-        Log.d(ConstantDefinitions.TAG, "REQUEST READY");
-
-        requestUpdates.sendPacket(SocketHandler.getOStream());
-
-        Log.d(ConstantDefinitions.TAG, "After Sending Request Packet");
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
@@ -232,6 +220,8 @@ public class MainView extends Activity implements Runnable{
                     if (valueTOD == NormalTOD.POSTED_SPEED_LIMIT) {
 
                         current_limit = Integer.valueOf(dataMap.get(NormalTOD.POSTED_SPEED_LIMIT));
+
+                        Log.d(ConstantDefinitions.TAG, Integer.toString(current_limit));
                         speed_limit.setText(Integer.toString(current_limit));
 
                     }
@@ -241,7 +231,7 @@ public class MainView extends Activity implements Runnable{
                         int current_speed = Integer.valueOf(dataMap.get(NormalTOD.VEHICLE_SPEED));
                         vehicle_speed.setText(Integer.toString(current_speed));
 
-                        if(current_limit > 0) {
+                        if(current_limit > -1) {
 
                             if (current_speed <= current_limit) {
 
@@ -327,6 +317,11 @@ public class MainView extends Activity implements Runnable{
                     if (valueTOD == NormalTOD.VEHICLE_CORNERING_ACCELERATION) {
                         cornering_acc.setText(dataMap.get(NormalTOD.VEHICLE_CORNERING_ACCELERATION));
                     }
+
+                    if (valueTOD == NormalTOD.CURRENT_LEEWAY)
+                    {
+                        current_leeway = Integer.parseInt(dataMap.get(NormalTOD.CURRENT_LEEWAY));
+                    }
                 }
 
                 Log.d(ConstantDefinitions.TAG, "Showed Data");
@@ -361,8 +356,44 @@ public class MainView extends Activity implements Runnable{
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        requestPacket cancelUpdates = new requestPacket();
+        cancelUpdates.setTypeofRequest(ConstantDefinitions.CANCEL_REQUEST_TYPE);
 
-   /* public void setSpeed(double curspeed, double limit, double leeway )
+        for(TODint TOD : updateRequests) {
+            cancelUpdates.addData((byte)TOD.showByteValue());
+        }
+
+        Log.d(ConstantDefinitions.TAG, "CANCEL READY");
+
+        cancelUpdates.sendPacket(SocketHandler.getOStream());
+
+        Log.d(ConstantDefinitions.TAG, "After Sending CANCEL Packet");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(ConstantDefinitions.TAG, "Before Sending Request Packet");
+
+        requestPacket requestUpdates = new requestPacket();
+        requestUpdates.setTypeofRequest(ConstantDefinitions.CONTINUOUS_REQUEST_TYPE);
+        requestUpdates.setTimeInterval(INTERVAL_TIME);
+
+        for(TODint TOD : updateRequests) {
+            requestUpdates.addData((byte)TOD.showByteValue());
+        }
+
+        Log.d(ConstantDefinitions.TAG, "REQUEST READY");
+
+        requestUpdates.sendPacket(SocketHandler.getOStream());
+
+        Log.d(ConstantDefinitions.TAG, "After Sending Request Packet");
+    }
+
+    /* public void setSpeed(double curspeed, double limit, double leeway )
     {
         String speedstring = Double.toString(curspeed);
 

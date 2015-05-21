@@ -58,7 +58,7 @@ public class Packet {
         packetReady = new byte[length + 1];
         bytebuffer.clear();
         bytebuffer.get(packetReady, 0, length + 1);
-        packetReady[1] = (byte) length;
+        packetReady[1] = (byte) (length + 1);
 
         StringBuffer sb = new StringBuffer();
         for( byte b : packetReady )

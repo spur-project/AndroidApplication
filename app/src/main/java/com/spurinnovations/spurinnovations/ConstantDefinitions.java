@@ -24,4 +24,9 @@ public class ConstantDefinitions {
     public static final byte UPDATE_PACKET = (byte) 0xff;
     public static final byte ESCAPE_SEQUENCE = (byte) 0x1B;
     public static final byte BACKOFF_PACKET_SIZE = (byte) 5;
+
+    public static final byte CANCEL_REQUEST_TYPE = (byte) 0x00;
+    public static final byte SINGLE_REQUEST_TYPE = (byte) 0x01;
+    public static final byte CONTINUOUS_REQUEST_TYPE = (byte) 0xff;
+
 }

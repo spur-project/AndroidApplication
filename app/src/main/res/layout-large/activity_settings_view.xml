@@ -86,15 +86,6 @@
                 android:layout_alignParentStart="true"
                 android:onClick="showAccelerationRate"/>
 
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="75dp"
-                android:text="Speed"
-                android:background="@drawable/button_setting"
-                android:id="@+id/addspeedbutton"
-                android:layout_below="@+id/addaccelerationratebutton"
-                android:layout_alignParentStart="true"
-                android:onClick="showSpeed"/>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
@@ -106,42 +97,321 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="fill_parent"
-                    android:id="@+id/RadioGroup"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Stay within speed limit"
-                        android:textColor="#ffffff"
-                        android:id="@+id/StayLimit"
-                        android:textSize="20sp"
-                        android:layout_below="@+id/UserName"
-                        android:layout_alignParentStart="true" />
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Allow some leeway"
-                        android:textSize="20sp"
-                        android:textColor="#ffffff"
-                        android:id="@+id/Leeway"
-                        android:layout_below="@+id/StayLimit"
-                        android:layout_alignParentStart="true" />
-                </RadioGroup>
+                    android:text="Leeway"
+                    android:textColor="#ffffff"
+                    android:layout_gravity="center"
+                    android:textSize="20sp"/>
 
                 <EditText
-                    android:id="@+id/LeewaySpeed"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_below="@id/RadioGroup"
-                    android:hint="10 km/h"
-                    android:textSize="20dp"
-                    android:textColor="#ffffff"/>
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/LeewayProfile"
+                    android:textColorHint="#ffffff"
+                    android:textColor="#ffffff"
+                    android:hint="Enter Leeway profile (0-3)"
+                    />
 
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TableRow>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Speed (km/h)"
+                            android:textColor="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Leeway (km/h)"
+                            android:textColor="#ffffff"
+                            android:textSize="20sp"/>
+
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:id="@+id/leewayBreakpoint1"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:inputType="number"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue1"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint2"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue2"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint3"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue3"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint4"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue4"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint5"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue5"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint6"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue6"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint7"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue7"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint8"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue8"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint9"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue9"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint10"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue10"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayBreakpoint11"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="0-255"
+                            android:inputType="number"
+                            android:id="@+id/leewayValue11"
+                            android:maxLength="3"
+                            android:textColor="#ffffff"
+                            android:textColorHint="#ffffff"
+                            android:textSize="20sp"/>
+                    </TableRow>
+
+                    <TableRow>
+
+                        <Button
+                            android:text="Send Leeway"
+                            android:background="@drawable/roundbutton"
+                            android:id="@+id/sendLeewayButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="sendLeeway"/>
+
+                    </TableRow>
+
+
+                </TableLayout>
 
             </LinearLayout>
             <!--<CheckBox
@@ -1055,434 +1325,6 @@
                 </TableLayout>
 
             </LinearLayout>
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/addspeedbutton"
-                android:id="@+id/AddSpeed"
-                android:background="#181818"
-                android:layout_marginTop="5dp"
-                android:visibility="gone"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Speed"
-                    android:textColor="#ffffff"
-                    android:layout_gravity="center"
-                    android:textSize="20sp"/>
-
-                <EditText
-                    android:layout_width="300dp"
-                    android:layout_height="45dp"
-                    android:id="@+id/SpeedProfile"
-                    android:textColorHint="#ffffff"
-                    android:textColor="#ffffff"
-                    android:hint="Enter speed profile"
-                    />
-
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Max acceleration rate limit"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 1"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 2"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 3"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 4"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 5"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 6"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 7"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 8"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 9"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 10"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Breakpoint 11"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="value 1"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 2"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 3"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 4"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 5"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 6"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 7"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 8"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 9"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 10"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Value 11"
-                            android:textColor="#ffffff"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="0-255"
-                            android:maxLength="3"
-                            android:textColor="#ffffff"
-                            android:textColorHint="#ffffff"
-                            android:textSize="20sp"/>
-                    </TableRow>
-                </TableLayout>
-
-            </LinearLayout>
-
 
         </RelativeLayout>
 

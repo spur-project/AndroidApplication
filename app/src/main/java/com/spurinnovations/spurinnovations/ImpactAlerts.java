@@ -77,7 +77,7 @@ public class ImpactAlerts extends Activity {
                     }
                 });
             }
-        }, 5000);
+        }, 3000);
     }
 
 

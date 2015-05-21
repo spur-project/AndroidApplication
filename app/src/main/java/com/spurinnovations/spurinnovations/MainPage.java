@@ -171,7 +171,7 @@ public class MainPage extends Activity implements Runnable{
             mBluetoothSocket.connect();
             SocketHandler.setSocket(mBluetoothSocket);
 
-            OutputStream writeOut = SocketHandler.getOStream();
+            /*OutputStream writeOut = SocketHandler.getOStream();
             // unique ID for phones --> In the case of tablets the best option would be to use a 64-bytes generator
             //TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
             // Simplest approach so far wi-fi has to be on at all times.
@@ -183,7 +183,7 @@ public class MainPage extends Activity implements Runnable{
             writeOut.write(devID);
             writeOut.flush();
 
-            Log.d(ConstantDefinitions.TAG, "After Sending MAC");
+            Log.d(ConstantDefinitions.TAG, "After Sending MAC");*/
             mHandler.sendEmptyMessage(0);
         }
         catch (IOException eConnectException)
